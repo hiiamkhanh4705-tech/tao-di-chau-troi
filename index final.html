@@ -1,0 +1,1168 @@
+<!doctype html>
+<html lang="vi"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<style>:root{padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}[hidden]{display:none!important}img{max-width:100%}</style>
+</head><body>
+<title>Táo đi chầu trời</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;600;700;800&family=Paytone+One&display=swap">
+<style>
+/* Layout: celestial sky page; lacquered palace board (10x10, numbered from the kitchen up to Thiên Đình) left, court panel right; stacks on phones. */
+:root{
+  --sky-top:#7FC2EE; --sky-mid:#B9DDF5; --sky-bot:#FFE7C9;
+  --lacquer:#C8372F; --lacquer-deep:#7E1B1B; --gold:#F5BF3C; --gold-deep:#B07A16;
+  --cream:#FFF3D6; --paper:#FFF9EA; --ink:#3A1E16; --ink-soft:#6E4A3C;
+  --jade:#2C9A76; --cloud:#FFFFFF; --wrong:#C8372F; --right:#22875F;
+  --f-display:"Paytone One","Baloo 2",system-ui,sans-serif;
+  --f-body:"Baloo 2",system-ui,-apple-system,"Segoe UI",sans-serif;
+  color-scheme:light;
+}
+*{box-sizing:border-box}
+html,body{min-height:100%}
+body{
+  margin:0;font-family:var(--f-body);color:var(--ink);font-size:16px;line-height:1.4;
+  background:var(--sky-mid);
+  background-image:
+    radial-gradient(ellipse 340px 90px at 8% 18%, rgba(255,255,255,.85), transparent 70%),
+    radial-gradient(ellipse 260px 70px at 92% 30%, rgba(255,255,255,.8), transparent 70%),
+    radial-gradient(ellipse 420px 110px at 70% 88%, rgba(255,255,255,.7), transparent 70%),
+    linear-gradient(180deg,var(--sky-top) 0%,var(--sky-mid) 45%,var(--sky-bot) 100%);
+  background-attachment:fixed;
+  padding-left:max(16px, env(safe-area-inset-left, 0px));
+  padding-right:max(16px, env(safe-area-inset-right, 0px));
+  padding-block:10px 24px;
+}
+button{font-family:inherit;cursor:pointer}
+button:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-visible{outline:3px solid var(--gold-deep);outline-offset:2px}
+input,select,textarea{font-family:inherit;font-size:15px;color:var(--ink);background:#fff;border:2px solid #E6CFA2;border-radius:10px;padding:8px 10px;min-width:0}
+textarea{resize:vertical}
+
+/* ---------- top bar ---------- */
+.topbar{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;max-width:1320px;margin:0 auto 10px}
+.brand{display:flex;align-items:center;gap:10px;min-width:0}
+.brand img{width:46px;height:auto;filter:drop-shadow(0 2px 0 rgba(0,0,0,.15))}
+.brand h1{margin:0;font-family:var(--f-display);font-weight:400;font-size:clamp(24px,3.4vw,38px);line-height:1;color:var(--gold);
+  -webkit-text-stroke:2px var(--lacquer-deep);paint-order:stroke fill;text-shadow:0 3px 0 var(--lacquer-deep);letter-spacing:.5px}
+.brand p{margin:2px 0 0;font-size:13px;color:var(--ink-soft);font-weight:600}
+.tools{display:flex;gap:8px;flex-wrap:wrap}
+.tbtn{display:inline-flex;align-items:center;gap:6px;border:2px solid var(--lacquer-deep);background:var(--paper);color:var(--lacquer-deep);
+  font-weight:700;font-size:14px;padding:6px 12px;border-radius:999px;box-shadow:0 3px 0 var(--lacquer-deep);transition:transform .1s}
+.tbtn:active{transform:translateY(2px);box-shadow:0 1px 0 var(--lacquer-deep)}
+.tbtn svg{width:18px;height:18px}
+.tbtn.off{opacity:.6}
+
+/* ---------- main layout ---------- */
+.main{display:grid;grid-template-columns:minmax(0,1fr) 330px;gap:18px;max-width:1320px;margin:0 auto;align-items:start}
+@media (max-width:900px){.main{grid-template-columns:minmax(0,1fr)}}
+.board-col{display:flex;justify-content:center;min-width:0}
+.frame{
+  width:min(100%, calc((100vh - 110px) * var(--ar, .917)));min-width:0;
+  background:linear-gradient(180deg,#D8463B,var(--lacquer) 40%,#A82A25);
+  border:4px solid var(--lacquer-deep);border-radius:18px;padding:3.2% 2.4% 2.4%;
+  box-shadow:0 8px 0 var(--lacquer-deep),0 18px 30px rgba(80,20,10,.25), inset 0 0 0 4px var(--gold);
+  position:relative;
+}
+@media (max-width:900px){.frame{width:100%}}
+.frame::before,.frame::after{content:"";position:absolute;top:10px;width:18px;height:18px;border-radius:50%;background:radial-gradient(circle at 35% 35%,#FFE89A,var(--gold) 55%,var(--gold-deep));box-shadow:0 0 0 2px var(--lacquer-deep)}
+.frame::before{left:10px}.frame::after{right:10px}
+@media (max-width:640px){.frame::before,.frame::after{display:none}}
+.wrap{position:relative;width:100%;aspect-ratio:1000/1090;max-width:100%}
+.board{position:absolute;left:0;top:0;width:100%;height:91.743%;font-size:18px;display:grid;grid-template-columns:repeat(10,1fr);grid-template-rows:repeat(10,1fr);
+  border:3px solid var(--lacquer-deep);border-radius:6px;overflow:hidden;background:var(--lacquer-deep)}
+.cell{position:relative;display:flex;align-items:center;justify-content:center;font-family:var(--f-display);font-size:1em;
+  border:1px solid rgba(126,27,27,.35);user-select:none}
+.cell.a{background:radial-gradient(circle at 50% 50%,#FFF8E4 0 35%,var(--cream) 36% 100%);color:var(--lacquer)}
+.cell.b{background:radial-gradient(circle at 50% 50%,#D9473D 0 35%,var(--lacquer) 36% 100%);color:#FFE6B0}
+.cell .n{position:relative;z-index:1;text-shadow:0 1px 0 rgba(0,0,0,.12)}
+.cell.lucky{background:radial-gradient(circle,#FFE48A 0 40%,var(--gold) 70%,#E2A52A 100%);color:var(--lacquer-deep)}
+.cell .n.corner{position:absolute;transform:translate(-50%,-50%);font-size:.55em;line-height:1}
+.cell.lucky svg{width:58%;height:58%;animation:bob 2.4s ease-in-out infinite}
+.cell.goal{background:linear-gradient(180deg,#FFF0B8,var(--gold));color:var(--lacquer-deep)}
+@keyframes bob{50%{transform:translateY(-6%)}}
+.overlay{position:absolute;left:0;top:0;width:100%;height:91.743%;pointer-events:none;overflow:visible}
+.kitchen{position:absolute;left:0;right:0;bottom:0;height:6.6%;border-radius:10px;
+  background:repeating-linear-gradient(90deg,#8B4A2B 0 22px,#7A3F24 22px 44px);border:3px solid var(--lacquer-deep);
+  display:flex;align-items:center;justify-content:flex-end;padding:0 2%;color:#FFE6B0;font-weight:800;font-size:clamp(10px,1.5vw,15px)}
+.kitchen span{background:rgba(0,0,0,.25);padding:1px 10px;border-radius:999px}
+.emperor{position:absolute;left:0.6%;top:-2.2%;width:9.2%;z-index:4;cursor:pointer;filter:drop-shadow(0 3px 2px rgba(0,0,0,.25));transition:transform .15s;transform-origin:50% 100%}
+.emperor:hover,.emperor:focus-visible{transform:scale(1.08)}
+.emperor.glow{animation:glow 1s ease-in-out infinite}
+@keyframes glow{50%{filter:drop-shadow(0 0 10px #FFE48A) drop-shadow(0 0 3px #fff);transform:scale(1.08)}}
+.goal-tag{position:absolute;left:0;top:-4.2%;width:10%;text-align:center;font-family:var(--f-display);font-size:clamp(8px,1.1vw,12px);color:var(--gold);z-index:4;
+  -webkit-text-stroke:1px var(--lacquer-deep);paint-order:stroke fill;display:none}
+.tokens{position:absolute;inset:0;pointer-events:none;z-index:5}
+.token{position:absolute;width:8.4%;transform:translate(-50%,-80%) scale(var(--s,1));transform-origin:50% 80%;transition:left .2s ease,top .2s ease,transform .2s ease;will-change:left,top}
+.token .ti{position:relative}
+.token img{width:100%;display:block;filter:drop-shadow(0 2px 1px rgba(0,0,0,.35))}
+.token .ring{position:absolute;left:12%;right:12%;bottom:-6%;height:20%;border-radius:50%;background:var(--c);opacity:.9;z-index:-1;box-shadow:0 0 0 2px #fff}
+.token.hop .ti{animation:hop .2s ease}
+.token.cur{z-index:6}
+.token.cur .ring{animation:pulse 1.2s ease-in-out infinite}
+@keyframes hop{50%{transform:translateY(-28%)}}
+@keyframes pulse{50%{box-shadow:0 0 0 2px #fff,0 0 0 7px var(--c)}}
+
+/* ---------- side panel ---------- */
+.side{display:flex;flex-direction:column;gap:14px;min-width:0}
+.card{background:var(--paper);border:3px solid var(--lacquer-deep);border-radius:16px;box-shadow:0 5px 0 var(--lacquer-deep);padding:14px}
+.card h2{margin:0 0 8px;font-family:var(--f-display);font-weight:400;font-size:17px;color:var(--lacquer);letter-spacing:.3px}
+.turn{display:grid;grid-template-columns:84px 1fr;gap:12px;align-items:center}
+.turn .av{width:84px;height:96px;display:flex;align-items:flex-end;justify-content:center;background:radial-gradient(circle at 50% 70%,var(--c,#eee) 0 38%,transparent 39%)}
+.turn .av img{max-height:100%;max-width:100%}
+.turn .who{font-family:var(--f-display);font-size:20px;line-height:1.1;color:var(--ink);overflow-wrap:anywhere}
+.turn .where{color:var(--ink-soft);font-weight:600;font-size:14px}
+.rollrow{display:flex;align-items:center;gap:14px;margin-top:12px}
+.die{width:72px;height:72px;flex:none;border-radius:16px;background:linear-gradient(145deg,#FFFDF5,#F1E4C4);border:3px solid var(--lacquer-deep);box-shadow:0 4px 0 var(--lacquer-deep);display:grid;place-items:center;cursor:pointer}
+.die svg{width:86%;height:86%}
+.die.rolling{animation:shake .12s linear infinite}
+@keyframes shake{0%{transform:rotate(-12deg) translateY(-3px)}50%{transform:rotate(12deg) translateY(2px)}100%{transform:rotate(-12deg) translateY(-3px)}}
+.bigbtn{flex:1;font-family:var(--f-display);font-size:19px;color:#fff;background:linear-gradient(180deg,#E0503F,var(--lacquer));border:3px solid var(--lacquer-deep);
+  border-radius:14px;padding:12px 10px;box-shadow:0 5px 0 var(--lacquer-deep);text-shadow:0 2px 0 rgba(0,0,0,.2)}
+.bigbtn:active{transform:translateY(3px);box-shadow:0 2px 0 var(--lacquer-deep)}
+.bigbtn:disabled{filter:grayscale(.6);opacity:.65;cursor:not-allowed}
+.hint{margin:8px 0 0;font-size:13px;color:var(--ink-soft);font-weight:600;min-height:1.2em}
+.plist{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:6px}
+.plist li{display:grid;grid-template-columns:34px 1fr auto;gap:8px;align-items:center;padding:4px 8px 4px 4px;border-radius:12px;border:2px solid transparent}
+.plist li.cur{border-color:var(--gold-deep);background:#FFF0C7}
+.plist img{width:34px;height:38px;object-fit:contain}
+.plist .nm{font-weight:700;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.plist .nm small{display:block;font-weight:600;font-size:12px;color:var(--ink-soft)}
+.plist li.done{opacity:.55}
+.pickers.steal{justify-content:flex-start;margin:8px 0 2px}
+.rank{list-style:none;margin:0 0 14px;padding:0;display:flex;flex-direction:column;gap:6px;counter-reset:r}
+.rank li{display:grid;grid-template-columns:28px 34px 1fr auto;gap:8px;align-items:center;background:#fff;border:2px solid #EAD3A3;border-radius:12px;padding:4px 10px;counter-increment:r;font-weight:700}
+.rank li::before{content:counter(r);font-family:var(--f-display);color:var(--lacquer)}
+.rank li.top{border-color:var(--gold-deep);background:#FFF0C7}
+.rank img{width:34px;height:38px;object-fit:contain}
+.rank b{color:var(--lacquer);font-variant-numeric:tabular-nums}
+.plist .ps{font-variant-numeric:tabular-nums;font-weight:800;color:var(--lacquer)}
+.badge{display:inline-block;font-size:11px;font-weight:800;padding:0 7px;border-radius:999px;background:var(--lacquer);color:#fff;margin-left:4px;vertical-align:1px}
+.log{list-style:none;margin:0;padding:0;font-size:14px;max-height:190px;overflow:auto;display:flex;flex-direction:column;gap:4px}
+.log li{padding-left:12px;position:relative;color:var(--ink-soft)}
+.log li::before{content:"";position:absolute;left:0;top:.6em;width:6px;height:6px;border-radius:50%;background:var(--gold-deep)}
+.log li:first-child{color:var(--ink);font-weight:700}
+.legend{display:grid;grid-template-columns:1fr 1fr;gap:6px 10px;font-size:13px;font-weight:600;color:var(--ink-soft)}
+.legend div{display:flex;gap:6px;align-items:center}
+.legend i{width:20px;height:14px;border-radius:4px;flex:none;border:2px solid var(--lacquer-deep)}
+
+/* ---------- modal ---------- */
+.modal{position:fixed;inset:0;z-index:50;display:flex;align-items:center;justify-content:center;background:rgba(40,15,10,.55);
+  padding:max(12px,env(safe-area-inset-top,0px)) max(12px,env(safe-area-inset-right,0px)) max(12px,env(safe-area-inset-bottom,0px)) max(12px,env(safe-area-inset-left,0px));animation:fade .18s ease}
+@keyframes fade{from{opacity:0}}
+.sheet{background:var(--paper);border:4px solid var(--lacquer-deep);border-radius:20px;box-shadow:0 8px 0 var(--lacquer-deep);width:min(620px,100%);max-height:100%;overflow:auto;padding:20px;position:relative}
+.sheet.wide{width:min(1000px,100%)}
+.sheet h3{margin:0 0 4px;font-family:var(--f-display);font-weight:400;font-size:24px;color:var(--lacquer)}
+.sheet .sub{margin:0 0 14px;color:var(--ink-soft);font-weight:600}
+.x{position:absolute;top:10px;right:10px;width:36px;height:36px;border-radius:50%;border:2px solid var(--lacquer-deep);background:#fff;color:var(--lacquer-deep);font-size:20px;line-height:1;font-weight:800}
+.row{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+.btn{border:2px solid var(--lacquer-deep);background:#fff;color:var(--lacquer-deep);font-weight:700;border-radius:10px;padding:7px 12px;font-size:14px}
+.btn.pri{background:var(--lacquer);color:#fff}
+.btn.gold{background:var(--gold);color:var(--lacquer-deep)}
+.btn.ghost{border-color:transparent;background:transparent;text-decoration:underline}
+.btn:disabled{opacity:.5;cursor:not-allowed}
+
+/* question scroll */
+.scroll{width:min(640px,100%);position:relative;padding:0 14px}
+.scroll .rod{height:22px;border-radius:12px;background:linear-gradient(180deg,#E25A47,var(--lacquer) 50%,var(--lacquer-deep));border:3px solid var(--lacquer-deep);position:relative;z-index:2}
+.scroll .rod::before,.scroll .rod::after{content:"";position:absolute;top:50%;width:22px;height:30px;transform:translateY(-50%);border-radius:8px;background:var(--gold);border:3px solid var(--lacquer-deep)}
+.scroll .rod::before{left:-16px}.scroll .rod::after{right:-16px}
+.scroll .body{background:linear-gradient(90deg,#F7E6BE,#FFF7E2 12%,#FFF7E2 88%,#F7E6BE);border-left:3px solid #D9B56E;border-right:3px solid #D9B56E;margin:-4px 6px;padding:22px 22px 18px;max-height:calc(100vh - 120px);overflow:auto}
+.qhead{display:flex;align-items:center;gap:10px;margin-bottom:8px}
+.qhead img{width:46px;height:52px;object-fit:contain}
+.qhead .t{font-weight:800;color:var(--ink-soft);font-size:14px;line-height:1.2}
+.qhead .t b{color:var(--lacquer);font-family:var(--f-display);font-weight:400;font-size:17px;display:block}
+.qtype{display:inline-block;background:var(--jade);color:#fff;font-weight:800;font-size:12px;border-radius:999px;padding:1px 10px;margin-bottom:6px}
+.qtext{font-size:clamp(19px,2.6vw,25px);font-weight:700;line-height:1.3;margin:0 0 14px;text-wrap:balance;overflow-wrap:anywhere}
+.opts{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+@media (max-width:520px){.opts{grid-template-columns:1fr}}
+.opt{display:flex;gap:10px;align-items:center;text-align:left;font-size:17px;font-weight:700;background:#fff;border:3px solid #E2C07E;border-radius:14px;padding:10px 12px;color:var(--ink);min-width:0;overflow-wrap:anywhere}
+.opt .k{flex:none;width:30px;height:30px;border-radius:50%;background:var(--lacquer);color:#fff;display:grid;place-items:center;font-family:var(--f-display);font-size:15px}
+.opt:hover:not(:disabled){border-color:var(--lacquer)}
+.opt.right{border-color:var(--right);background:#E3F6EC}
+.opt.wrong{border-color:var(--wrong);background:#FDE4E0}
+.fill{display:flex;gap:8px}
+.fill input{flex:1;font-size:19px;padding:10px 12px}
+.order-pool,.order-ans{display:flex;flex-wrap:wrap;gap:8px;min-height:52px;padding:8px;border-radius:12px}
+.order-pool{background:rgba(226,192,126,.25)}
+.order-ans{border:2px dashed #D9B56E;background:#fff;margin-bottom:8px;counter-reset:o}
+.chip{border:2px solid var(--lacquer-deep);background:#fff;border-radius:10px;padding:6px 10px;font-weight:700;font-size:16px;color:var(--ink);max-width:100%;overflow-wrap:anywhere;text-align:left}
+.order-ans .chip{background:#FFF0C7;counter-increment:o}
+.order-ans .chip::before{content:counter(o) ". ";color:var(--lacquer)}
+.timer{height:8px;border-radius:999px;background:#EAD7AE;overflow:hidden;margin-bottom:12px}
+.timer i{display:block;height:100%;width:100%;background:linear-gradient(90deg,var(--jade),var(--gold),var(--lacquer));transform-origin:left;transition:transform .25s linear}
+.verdict{margin-top:14px;padding:12px 14px;border-radius:14px;font-weight:700}
+.verdict.ok{background:#E3F6EC;border:2px solid var(--right);color:#145A3F}
+.verdict.no{background:#FDE4E0;border:2px solid var(--wrong);color:#7E1B1B}
+.verdict b{font-family:var(--f-display);font-weight:400;font-size:20px;display:block}
+.verdict .explain{display:block;margin-top:6px;font-weight:600;opacity:.85}
+.verdict .row{margin-top:10px}
+
+/* event decree */
+.decree{text-align:center}
+.decree svg.env{width:90px;height:110px;margin:0 auto 6px;display:block;animation:pop .5s cubic-bezier(.3,1.6,.6,1)}
+@keyframes pop{from{transform:scale(.3) rotate(-20deg);opacity:0}}
+.decree h4{margin:0;font-family:var(--f-display);font-weight:400;font-size:26px;color:var(--lacquer)}
+.decree p{font-size:18px;font-weight:700;margin:6px 0 14px}
+.pickers{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;margin-bottom:8px}
+.pickers button{display:flex;align-items:center;gap:6px;padding:4px 12px 4px 4px;border-radius:999px;border:2px solid var(--lacquer-deep);background:#fff;font-weight:700}
+.pickers img{width:30px;height:34px;object-fit:contain}
+
+/* toast */
+.toast{position:fixed;left:50%;top:calc(14px + env(safe-area-inset-top,0px));transform:translateX(-50%);z-index:60;background:var(--lacquer-deep);color:#FFE6B0;font-weight:800;
+  padding:10px 18px;border-radius:999px;box-shadow:0 6px 18px rgba(0,0,0,.25);max-width:calc(100% - 32px);text-align:center;animation:drop .25s ease}
+@keyframes drop{from{transform:translate(-50%,-20px);opacity:0}}
+
+/* splash */
+.splash .sheet{text-align:center;width:min(720px,100%);background:radial-gradient(circle at 50% 30%,#FFF9EA,#FFEFC8)}
+.splash h2{margin:4px 0 0;font-family:var(--f-display);font-weight:400;font-size:clamp(34px,7vw,60px);line-height:1;color:var(--gold);
+  -webkit-text-stroke:3px var(--lacquer-deep);paint-order:stroke fill;text-shadow:0 5px 0 var(--lacquer-deep)}
+.lineup{display:flex;justify-content:center;align-items:flex-end;gap:2%;margin:14px auto 6px;max-width:560px}
+.lineup img{width:17%;filter:drop-shadow(0 3px 2px rgba(0,0,0,.2))}
+.lineup img.king{width:24%}
+.lineup img:nth-child(odd){animation:bob 2.6s ease-in-out infinite}
+.lineup img:nth-child(even){animation:bob 2.6s ease-in-out .6s infinite}
+.splash p.story{max-width:52ch;margin:6px auto 16px;color:var(--ink-soft);font-weight:600}
+.splash .row{justify-content:center}
+
+/* players editor */
+.pedit{display:flex;flex-direction:column;gap:10px;margin-bottom:12px}
+.prow{display:grid;grid-template-columns:52px minmax(0,1fr) minmax(0,170px) 40px;gap:8px;align-items:center;background:#fff;border:2px solid #EAD3A3;border-radius:14px;padding:6px 8px}
+.prow img{width:48px;height:54px;object-fit:contain}
+.prow .del{width:36px;height:36px;border-radius:50%;border:2px solid var(--lacquer-deep);background:#fff;color:var(--lacquer-deep);font-weight:800}
+@media (max-width:520px){.prow{grid-template-columns:44px minmax(0,1fr) 36px}.prow select{grid-column:2/3}.prow .del{grid-row:1/3;grid-column:3}.prow img{grid-row:1/3}}
+
+/* question bank */
+.qb{display:grid;grid-template-columns:240px minmax(0,1fr);gap:16px}
+@media (max-width:760px){.qb{grid-template-columns:minmax(0,1fr)}}
+.sets{display:flex;flex-direction:column;gap:6px}
+.setitem{display:grid;grid-template-columns:24px minmax(0,1fr);gap:6px;align-items:center;padding:6px 8px;border-radius:12px;border:2px solid #EAD3A3;background:#fff;cursor:pointer;text-align:left}
+.setitem.sel{border-color:var(--lacquer);background:#FFF0C7}
+.setitem small{display:block;color:var(--ink-soft);font-weight:600}
+.setitem .nm{font-weight:800;overflow-wrap:anywhere}
+.qlist{list-style:none;margin:8px 0;padding:0;display:flex;flex-direction:column;gap:6px;max-height:280px;overflow:auto}
+.qlist li{display:grid;grid-template-columns:auto minmax(0,1fr) auto;gap:8px;align-items:center;background:#fff;border:2px solid #EFDDB6;border-radius:10px;padding:6px 8px}
+.qlist .tg{font-size:11px;font-weight:800;color:#fff;border-radius:999px;padding:1px 8px}
+.tg.mc{background:var(--jade)}.tg.fill{background:#3D7DD8}.tg.order{background:#8A5CC2}
+.qlist .tx{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-weight:600}
+.panel{background:#fff;border:2px solid #EAD3A3;border-radius:14px;padding:12px;margin-top:10px}
+.panel h4{margin:0 0 8px;font-size:16px;color:var(--lacquer)}
+.field{display:flex;flex-direction:column;gap:4px;margin-bottom:8px}
+.field label{font-weight:700;font-size:13px;color:var(--ink-soft)}
+.mcrow{display:grid;grid-template-columns:auto minmax(0,1fr) auto;gap:6px;align-items:center;margin-bottom:6px}
+.mcrow input[type=radio]{width:20px;height:20px;accent-color:var(--right)}
+pre.fmt{background:#FFF7E2;border:1px dashed #D9B56E;border-radius:10px;padding:8px 10px;font-size:13px;white-space:pre-wrap;margin:6px 0;overflow-x:auto}
+.chk{display:flex;gap:8px;align-items:flex-start;margin-top:6px;cursor:pointer}.chk input{margin-top:3px;flex:none}
+.small{font-size:13px;color:var(--ink-soft);font-weight:600}
+
+/* win */
+.win .sheet{text-align:center;background:radial-gradient(circle at 50% 35%,#FFF6CF,#FFE29A)}
+.win img{width:150px}
+.confetti{position:fixed;inset:0;pointer-events:none;z-index:55;overflow:hidden}
+.confetti i{position:absolute;top:-20px;width:10px;height:16px;border-radius:3px;animation:fall linear forwards}
+@keyframes fall{to{transform:translateY(110vh) rotate(720deg)}}
+@media (prefers-reduced-motion:reduce){*{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important}}
+</style>
+
+<header class="topbar">
+  <div class="brand">
+    <img src="assets/ngoc-hoang.png" alt="">
+    <div>
+      <h1>Táo đi chầu trời</h1>
+      <p>23 tháng Chạp · Rắn leo thang chốn Thiên Đình · bấm Ngọc Hoàng để ra câu hỏi phụ</p>
+    </div>
+  </div>
+  <nav class="tools" aria-label="Thanh công cụ">
+    <button class="tbtn" id="btnPlayers"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><circle cx="9" cy="8" r="3.5"/><path d="M2.5 20c.8-3.6 3.4-5.5 6.5-5.5s5.7 1.9 6.5 5.5"/><path d="M19 8v6M16 11h6"/></svg>Đội & ván</button>
+    <button class="tbtn" id="btnQuestions"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M5 4h11l3 3v13H5z"/><path d="M9.5 10a2.5 2.5 0 1 1 3.5 2.3c-.7.3-1 .8-1 1.5M12 17h.01"/></svg>Bộ câu hỏi</button>
+    <button class="tbtn" id="btnRules"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M4 5h6a2 2 0 0 1 2 2v13a2 2 0 0 0-2-2H4zM20 5h-6a2 2 0 0 0-2 2v13a2 2 0 0 1 2-2h6z"/></svg>Luật chơi</button>
+    <button class="tbtn" id="btnMusic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M9 18V5l11-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="17" cy="16" r="3"/></svg><span>Nhạc: bật</span></button>
+    <button class="tbtn" id="btnNew"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M4 12a8 8 0 1 0 2.4-5.7L4 8.5"/><path d="M4 3.5v5h5"/></svg>Ván mới</button>
+  </nav>
+</header>
+
+<main class="main">
+  <section class="board-col">
+    <div class="frame">
+      <div class="wrap" id="wrap">
+        <div class="board" id="board" aria-label="Bàn cờ 100 ô"></div>
+        <svg class="overlay" id="overlay" viewBox="0 0 1000 1000" aria-hidden="true"></svg>
+        <div class="kitchen"><span>Gian Bếp · xuất phát</span></div>
+        <img class="emperor" id="emperor" src="assets/ngoc-hoang.png" alt="Ngọc Hoàng ở đích, bấm để ra câu hỏi phụ" title="Bấm để ra câu hỏi phụ" role="button" tabindex="0">
+        <div class="tokens" id="tokens"></div>
+      </div>
+    </div>
+  </section>
+
+  <aside class="side">
+    <div class="card">
+      <h2>Lượt hiện tại</h2>
+      <div class="turn">
+        <div class="av" id="curAv"><img id="curImg" src="assets/tao-do.png" alt=""></div>
+        <div style="min-width:0"><div class="who" id="curName">—</div><div class="where" id="curWhere"></div></div>
+      </div>
+      <div class="rollrow">
+        <div class="die" id="die" role="img" aria-label="Xúc xắc"></div>
+        <button class="bigbtn" id="btnRoll">Gieo xúc xắc</button>
+      </div>
+      <p class="hint" id="hint">Trả lời đúng mới được tiến. Sai thì đứng yên, đội khác được cướp quyền.</p>
+    </div>
+    <div class="card">
+      <h2>Các đội</h2>
+      <ul class="plist" id="plist"></ul>
+    </div>
+    <div class="card">
+      <h2>Sổ Nam Tào</h2>
+      <ul class="log" id="log"></ul>
+    </div>
+    <div class="card">
+      <div class="legend">
+        <div><i style="background:#F5BF3C"></i>Thang mây: leo lên</div>
+        <div><i style="background:#2C9A76"></i>Rồng: trượt xuống</div>
+        <div><i style="background:radial-gradient(#FFE48A,#E2A52A)"></i>Lộc Trời: bốc lộc</div>
+        <div><i style="background:#8B4A2B"></i>Gian Bếp: xuất phát</div>
+      </div>
+    </div>
+  </aside>
+</main>
+
+<div id="modalRoot"></div>
+
+<script>
+(() => {
+'use strict';
+/* ================= data ================= */
+const SKINS = [
+  {id:'do',   name:'Táo Đỏ',      img:'assets/tao-do.png',      color:'#D9483B'},
+  {id:'xanh', name:'Táo Lam',     img:'assets/tao-xanh.png',    color:'#3D7DD8'},
+  {id:'be',   name:'Bé Mặt Trời', img:'assets/be-mat-troi.png', color:'#F29BB2'},
+  {id:'luc',  name:'Táo Lục',     img:'assets/tao-luc.png',     color:'#2C9A76'},
+  {id:'tim',  name:'Táo Tím',     img:'assets/tao-tim.png',     color:'#8A5CC2'},
+  {id:'bacha',name:'Bé Bạc Hà',   img:'assets/be-bac-ha.png',   color:'#4CC7A4'},
+  {id:'cam',  name:'Táo Cam',     img:'assets/tao-cam.png',     color:'#F08A24'},
+  {id:'hong', name:'Táo Hồng',    img:'assets/tao-hong.png',    color:'#C93D8E'},
+];
+const MAX_PLAYERS = 8;
+const skin = id => SKINS.find(s=>s.id===id) || SKINS[0];
+const MAPS = {
+  '30':  {id:'30',  name:'Sân Mây · 30 ô (ván nhanh)', cols:6, rows:5,
+          ladders:{3:14, 9:20, 16:26}, dragons:{13:4, 22:11, 28:17}, lucky:5, fwd:[2,3]},
+  '100': {id:'100', name:'Thiên Đình · 100 ô (ván dài)', cols:10, rows:10,
+          ladders:{4:25, 13:46, 33:49, 42:63, 50:69, 62:81, 74:92}, dragons:{27:5, 40:3, 43:18, 54:31, 66:45, 76:58, 89:53, 97:61}, lucky:5, fwd:[2,4]},
+};
+const KH = 90; // kitchen band height (board units)
+let MAP = MAPS['30'], N = 30, W = 600, H = 500, LADDERS = MAP.ladders, DRAGONS = MAP.dragons;
+const DRAGON_COLORS = [
+  {body:'#33A07A', belly:'#F8E7A8', fin:'#E5533D'},
+  {body:'#D9483B', belly:'#FFDB8E', fin:'#F2A93B'},
+  {body:'#E9AE22', belly:'#FFF2C6', fin:'#D9483B'},
+  {body:'#3D7DD8', belly:'#D4EEFF', fin:'#F5BF3C'},
+  {body:'#8A5CC2', belly:'#F2DCFF', fin:'#F5BF3C'},
+];
+const DEFAULT_SET = {
+  id:'trn31', name:'Trắc nghiệm Hồ sơ BHXH (31 câu)', enabled:true, questions:[
+  {"type": "mc", "q": "Một nhân sự mới tiếp nhận hồ sơ nhìn thấy tên biểu mẫu “Thông báo kết quả đóng BHXH, BHYT, BHTN”. Nếu cần xác định mã biểu mẫu tương ứng trong tài liệu, nên chọn mã nào?", "options": ["D02-LT", "C12-TS", "D01-TS", "TK1-TS"], "answer": 1, "explain": "C12-TS là thông báo kết quả đóng BHXH, BHYT, BHTN."},
+  {"type": "mc", "q": "Chọn cặp ghép đúng giữa biểu mẫu và chức năng.", "options": ["D01-TS – Bảng kê thông tin", "D02-LT – Tờ khai tham gia, điều chỉnh thông tin BHXH, BHYT", "D03-TS – Thông báo kết quả đóng", "TK1-TS – Danh sách hưởng thai sản"], "answer": 0, "explain": "D01-TS là Bảng kê thông tin."},
+  {"type": "mc", "q": "Một học sinh cần được cấp mới hoặc gia hạn thẻ BHYT theo nhóm nghiệp vụ trong tài liệu. Cặp mã nào phù hợp?", "options": ["HN7/VN7", "VN18A/VN18B", "HN10A/VN10A", "VN16/VN16a"], "answer": 2, "explain": "HN10A/VN10A gắn với cấp mới hoặc gia hạn thẻ BHYT học sinh, sinh viên."},
+  {"type": "mc", "q": "Người lao động báo rằng thẻ BHYT bị rách, không còn sử dụng được và cần cấp lại. Hướng xử lý nào khớp nhất với tài liệu?", "options": ["Dùng HN7/VN7; hệ thống tạo TK1-TS", "Dùng VN31; hệ thống tạo D03-TS", "Dùng C12-TS; không cần hồ sơ", "Dùng VN18B; hệ thống tạo 01B-HSB"], "answer": 0, "explain": "HN7/VN7 là nghiệp vụ cấp lại thẻ BHYT cho người lao động bị mất hoặc hỏng; hệ thống tạo TK1-TS."},
+  {"type": "mc", "q": "Trong các mã dưới đây, mã nào gắn với hồ sơ đề nghị giải quyết chế độ thai sản cho người lao động đang tham gia BHXH?", "options": ["VN18A", "VN18B", "VN18C", "VN31"], "answer": 1, "explain": "VN18B là mã gắn với chế độ thai sản."},
+  {"type": "mc", "q": "Bạn cần tìm biểu mẫu có chức năng báo cáo tình hình sử dụng lao động và danh sách tham gia BHXH, BHYT, BHTN. Hãy chọn đúng.", "options": ["D05-TS", "D03-TS", "D02-LT", "C12-TS"], "answer": 2, "explain": "D02-LT có tên gọi như mô tả trong câu hỏi."},
+  {"type": "mc", "q": "Câu nào mô tả đúng nhất vai trò của TK1-TS?", "options": ["Bảng kê thông tin bổ sung", "Tờ khai tham gia, điều chỉnh thông tin BHXH, BHYT", "Thông báo kết quả đóng hàng tháng", "Danh sách đề nghị hưởng thai sản"], "answer": 1, "explain": "TK1-TS là Tờ khai tham gia, điều chỉnh thông tin BHXH, BHYT."},
+  {"type": "mc", "q": "Một người thuộc trường hợp được hoàn lại khoản tiền BHYT đã đóng trùng. Mã nghiệp vụ nào được tài liệu liên hệ với việc hoàn trả tiền BHYT?", "options": ["VN31", "VN16a", "HN21", "VN18C"], "answer": 0, "explain": "VN31 là nghiệp vụ hoàn trả tiền đã đóng BHYT trong các trường hợp được hoàn."},
+  {"type": "mc", "q": "Bạn đang rà soát hồ sơ tham gia BHXH tự nguyện. Mã nào liên quan đến đăng ký tham gia, tham gia lại hoặc điều chỉnh thông tin BHXH tự nguyện?", "options": ["VN10", "VN16", "VN33", "HN4"], "answer": 1, "explain": "VN16 liên quan đến tham gia, tham gia lại hoặc điều chỉnh BHXH tự nguyện."},
+  {"type": "mc", "q": "Khi nhập dữ liệu bằng Excel, hệ thống tạo bản ghi có trạng thái “MT – Mới tạo”. Cách hiểu và xử lý nào phù hợp nhất?", "options": ["Hồ sơ đã bị từ chối, không cần kiểm tra", "Bản ghi mới được tạo; cần kiểm tra rồi ký/gửi theo quy trình", "Hồ sơ đã tự động hoàn tất mọi bước", "Dữ liệu chỉ được lưu để tham khảo, không thể xử lý tiếp"], "answer": 1, "explain": "Trạng thái “MT – Mới tạo” cho biết bản ghi mới được tạo và cần tiếp tục kiểm tra, ký/gửi."},
+  {"type": "mc", "q": "Một đơn vị cần báo giảm lao động. Hai mã được dùng tùy theo cơ quan BHXH quản lý đơn vị là cặp nào?", "options": ["HN4/VN4", "HN10A/VN10A", "VN18A/VN18B", "VN31/VN16a"], "answer": 0, "explain": "HN4/VN4 là nhóm biểu mẫu báo giảm lao động; tiền tố phụ thuộc cơ quan quản lý."},
+  {"type": "mc", "q": "Tình huống: mức đóng hoặc căn cứ đóng của người lao động thay đổi. Phương án nào khớp nhất với nhóm biểu mẫu được tài liệu nêu?", "options": ["VN5 và D02-LT", "VN31 và D03-TS", "VN18B và 01B-HSB", "C12-TS và D05-TS"], "answer": 0, "explain": "HN5/VN5 được dùng cho thay đổi điều kiện/căn cứ/mức đóng; D02-LT là biểu mẫu liên quan."},
+  {"type": "mc", "q": "Trong hồ sơ có tình huống nộp muộn hoặc cần bổ sung thông tin để xem xét mức hưởng BHYT cao hơn. Biểu mẫu nào có thể được yêu cầu bổ sung theo tài liệu?", "options": ["D03-TS", "D01-TS", "C12-TS", "D05-TS"], "answer": 1, "explain": "D01-TS là Bảng kê thông tin, được nêu trong một số trường hợp cần thông tin bổ sung."},
+  {"type": "mc", "q": "Một người không thuộc nhóm học sinh, sinh viên và chỉ tham gia BHYT cần đăng ký tham gia, cấp thẻ. Mã nghiệp vụ nào phù hợp nhất?", "options": ["VN10", "VN18B", "VN16a", "HN21"], "answer": 0, "explain": "VN10 gắn với việc tham gia/cấp thẻ BHYT cho người chỉ tham gia BHYT."},
+  {"type": "mc", "q": "Hồ sơ VN10 được lập cho người chỉ tham gia BHYT nhưng người đó chưa có mã số BHXH. Tài liệu lưu ý cần bổ sung thông tin gì?", "options": ["Phụ lục thành viên hộ gia đình", "Danh sách đề nghị hưởng thai sản", "Bảng kê kết quả đóng tháng trước", "Giấy đề nghị cấp lại sổ BHXH"], "answer": 0, "explain": "Tài liệu lưu ý bổ sung phụ lục thành viên hộ gia đình nếu người chỉ tham gia BHYT chưa có mã số BHXH."},
+  {"type": "mc", "q": "Hai hồ sơ đều liên quan đến hoàn trả tiền đã đóng, nhưng một hồ sơ là BHYT và một hồ sơ là BHXH tự nguyện. Cặp ghép nào đúng?", "options": ["VN31 – hoàn tiền BHYT; VN16a – hoàn tiền BHXH tự nguyện", "VN16a – hoàn tiền BHYT; VN31 – hoàn tiền BHXH tự nguyện", "VN18B – hoàn tiền BHYT; VN33 – hoàn tiền BHXH tự nguyện", "HN21 – hoàn tiền BHYT; HN4 – hoàn tiền BHXH tự nguyện"], "answer": 0, "explain": "VN31 gắn với hoàn trả BHYT; VN16a gắn với hoàn trả BHXH tự nguyện."},
+  {"type": "mc", "q": "Khi xử lý nghiệp vụ VN16, hệ thống được tài liệu mô tả là tạo những biểu mẫu nào?", "options": ["D02-LT và C12-TS", "D05-TS và TK1-TS", "D03-TS và 01B-HSB", "D01-TS và VN18B"], "answer": 1, "explain": "Theo tài liệu, VN16 tạo D05-TS và TK1-TS."},
+  {"type": "mc", "q": "Một người lao động ngừng việc/tạm hoãn hợp đồng từ 14 ngày làm việc trở lên trong tháng. Nếu cần xử lý việc tạm dừng đóng vào quỹ hưu trí và tử tuất theo tài liệu, nên xem xét mã nào?", "options": ["HN21", "VN31", "VN18C", "HN10A"], "answer": 0, "explain": "HN21 gắn với tạm dừng đóng vào quỹ hưu trí và tử tuất trong tình huống được mô tả."},
+  {"type": "mc", "q": "Khi áp dụng HN21, phương án nào phản ánh đúng các khoản vẫn tiếp tục đóng theo tài liệu?", "options": ["Chỉ quỹ hưu trí và tử tuất", "Quỹ ốm đau, thai sản; tai nạn lao động, bệnh nghề nghiệp và BHYT", "Không tiếp tục đóng bất kỳ khoản nào", "Chỉ bảo hiểm thất nghiệp"], "answer": 1, "explain": "Tài liệu nêu các khoản ốm đau, thai sản; tai nạn lao động, bệnh nghề nghiệp và BHYT vẫn tiếp tục đóng."},
+  {"type": "mc", "q": "Một nhân viên hỏi khi nào có thể nhận C12-TS. Cách trả lời nào sát với tài liệu nhất?", "options": ["Luôn có ngay sau khi nộp hồ sơ trong ngày", "Thường khoảng ngày 10 hàng tháng, tùy cơ quan BHXH quản lý", "Chỉ phát hành vào cuối năm", "Cứ đủ 14 ngày làm việc sẽ được cấp"], "answer": 1, "explain": "Tài liệu nêu thời điểm thường khoảng ngày 10 hàng tháng, tùy cơ quan BHXH quản lý."},
+  {"type": "mc", "q": "Một đơn vị ở Hà Nội đang quản lý hồ sơ báo giảm lao động. Khi đối chiếu mã biểu mẫu, cách phân biệt nào đúng theo quy ước tiền tố trong tài liệu?", "options": ["Dùng VN4 vì mọi hồ sơ đều do BHXH Việt Nam quản lý", "Dùng HN4 cho đơn vị do BHXH Hà Nội quản lý; VN4 cho đơn vị do BHXH Việt Nam quản lý", "Dùng HN10A vì đây là mã chung cho mọi nghiệp vụ", "Dùng VN31 vì có phát sinh thay đổi lao động"], "answer": 1, "explain": "Tiền tố HN/VN phân biệt nhóm hồ sơ theo cơ quan BHXH quản lý được tài liệu nêu."},
+  {"type": "mc", "q": "Chọn phương án ghép đúng cả ba thành phần: nghiệp vụ – mã biểu mẫu – biểu mẫu hệ thống tạo.", "options": ["Cấp lại thẻ BHYT cho người lao động bị mất/hỏng – HN7/VN7 – TK1-TS", "Hoàn tiền BHYT – VN31 – D02-LT", "Báo giảm lao động – HN4/VN4 – D03-TS", "Thai sản – VN18B – C12-TS"], "answer": 0, "explain": "HN7/VN7 gắn với cấp lại thẻ BHYT bị mất/hỏng và hệ thống tạo TK1-TS."},
+  {"type": "mc", "q": "Một bộ phận cần lập danh sách đề nghị giải quyết chế độ ốm đau, thai sản và dưỡng sức phục hồi sức khỏe. Biểu mẫu danh sách chính nào được nêu trong tài liệu?", "options": ["D02-LT", "01B-HSB", "D05-TS", "C12-TS"], "answer": 1, "explain": "01B-HSB là danh sách đề nghị giải quyết hưởng chế độ ốm đau, thai sản, dưỡng sức phục hồi sức khỏe."},
+  {"type": "mc", "q": "Tình huống: người đang tham gia BHXH bắt buộc qua đời và phát sinh hồ sơ tử tuất. Mã nghiệp vụ nào được tài liệu liên hệ với trường hợp này?", "options": ["VN33", "VN16", "VN10", "VN31"], "answer": 0, "explain": "Tài liệu liên hệ VN33 với hồ sơ tử tuất trong trường hợp người đang tham gia BHXH bắt buộc qua đời."},
+  {"type": "mc", "q": "Điểm nào cần lưu ý về hồ sơ VN33 theo tài liệu?", "options": ["Chỉ cần C12-TS và không có biểu mẫu khác", "Có sử dụng biểu mẫu giấy như 09-HSB và có thể kèm 04C tùy trường hợp", "Bắt buộc dùng D03-TS thay cho mọi biểu mẫu", "Luôn dùng duy nhất D05-TS"], "answer": 1, "explain": "Tài liệu đề cập biểu mẫu giấy 09-HSB và có thể kèm 04C tùy trường hợp."},
+  {"type": "mc", "q": "Đơn vị do BHXH Hà Nội quản lý cần làm hồ sơ VN16a để hoàn trả tiền BHXH tự nguyện. Ghi chú nào trong tài liệu cần được lưu ý?", "options": ["Đơn vị Hà Nội chỉ nộp điện tử", "Đơn vị Hà Nội nộp hồ sơ giấy; hồ sơ điện tử được nêu cho đơn vị do BHXH Việt Nam quản lý", "Không cần nộp hồ sơ", "Phải đổi sang VN31"], "answer": 1, "explain": "Tài liệu ghi chú VN16a: đơn vị do BHXH Việt Nam quản lý nộp điện tử, đơn vị Hà Nội nộp giấy."},
+  {"type": "mc", "q": "Chọn nhận định KHÔNG đúng về C12-TS theo tài liệu.", "options": ["Là thông báo kết quả đóng BHXH, BHYT, BHTN", "Thường được lấy tự động từ hệ thống theo kỳ hàng tháng", "Theo tài liệu, không yêu cầu đính kèm hồ sơ", "Là tờ khai đăng ký tham gia BHXH tự nguyện và hệ thống tạo D05-TS"], "answer": 3, "explain": "C12-TS là thông báo kết quả đóng, không phải tờ khai tham gia BHXH tự nguyện."},
+  {"type": "mc", "q": "Một người chỉ tham gia BHYT đã đóng tiền trùng và thuộc trường hợp được hoàn trả. Cặp thông tin nào nhất quán với tài liệu?", "options": ["VN31; hệ thống tạo D03-TS", "VN16a; hệ thống tạo D02-LT", "VN18B; hệ thống tạo D05-TS", "HN21; hệ thống tạo TK1-TS"], "answer": 0, "explain": "VN31 gắn với hoàn trả tiền BHYT và hệ thống tạo D03-TS."},
+  {"type": "mc", "q": "Khi gộp nhiều sổ BHXH, để tránh bỏ sót thông tin đối chiếu, cần ghi nhận những mã nào theo tài liệu?", "options": ["Chỉ mã của sổ mới nhất", "Mã số BHXH gốc và toàn bộ mã số bổ sung", "Chỉ mã đơn vị sử dụng lao động", "Chỉ mã thẻ BHYT đang sử dụng"], "answer": 1, "explain": "Tài liệu yêu cầu liệt kê mã số BHXH gốc và tất cả mã số bổ sung."},
+  {"type": "mc", "q": "Đâu là cách mô tả đúng nhất về C12-TS và hồ sơ đính kèm?", "options": ["C12-TS là thông báo kết quả đóng và không yêu cầu đính kèm hồ sơ", "C12-TS là hồ sơ thai sản, luôn cần 01B-HSB", "C12-TS là hồ sơ cấp lại thẻ, luôn cần TK1-TS", "C12-TS là hồ sơ báo giảm lao động, luôn cần D02-LT"], "answer": 0, "explain": "Theo tài liệu, C12-TS là thông báo kết quả đóng và không yêu cầu đính kèm hồ sơ."},
+  {"type": "mc", "q": "Một người cần cấp lại sổ BHXH do mất/hỏng nhưng không có thay đổi thông tin. Cặp mã nào được tài liệu nêu cho nghiệp vụ cấp lại sổ?", "options": ["HN23/VN13", "HN10A/VN10A", "VN18A/VN18B", "VN31/VN16a"], "answer": 0, "explain": "Tài liệu nêu HN23/VN13 cho cấp lại sổ BHXH do mất/hỏng không thay đổi thông tin."}
+]};
+/* ================= storage ================= */
+const store = {
+  get(k, d){ try{ const v = localStorage.getItem(k); return v ? JSON.parse(v) : d; }catch(e){ return d; } },
+  set(k, v){ try{ localStorage.setItem(k, JSON.stringify(v)); }catch(e){} }
+};
+const uid = () => Math.random().toString(36).slice(2,9);
+const cloneSet = x => JSON.parse(JSON.stringify(x));
+let sets = store.get('tdct.sets.v1', null);
+if(!sets){ sets = [cloneSet(DEFAULT_SET)]; store.set('tdct.sets.v1', sets); store.set('tdct.seeded.trn31', true); }
+else if(!store.get('tdct.seeded.trn31', false)){
+  sets = sets.filter(x => !['mau','cpdt','trn31'].includes(x.id));
+  sets.forEach(x => { x.enabled = false; });
+  sets.unshift(cloneSet(DEFAULT_SET));
+  store.set('tdct.sets.v1', sets); store.set('tdct.seeded.trn31', true);
+}
+let settings = Object.assign({music:true, sfx:true, timer:15, loose:true, map:'30', rolls:8, exact:true, steal:true}, store.get('tdct.settings.v1', {}));
+if(!settings.v2){ Object.assign(settings, {timer:15, map:'30', rolls:8, exact:true, steal:true, v2:true}); store.set('tdct.settings.v1', settings); }
+let roster = store.get('tdct.players.v1', null) || [
+  {name:'Nhóm 1', skin:'do'}, {name:'Nhóm 2', skin:'xanh'}, {name:'Nhóm 3', skin:'be'}, {name:'Nhóm 4', skin:'luc'}];
+const saveSets = () => store.set('tdct.sets.v1', sets);
+const saveSettings = () => store.set('tdct.settings.v1', settings);
+const saveRoster = () => store.set('tdct.players.v1', roster);
+
+/* ================= helpers ================= */
+const $ = s => document.querySelector(s);
+const sleep = ms => new Promise(r => setTimeout(r, ms));
+const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const shuffle = a => { a = a.slice(); for(let i=a.length-1;i>0;i--){ const j=Math.floor(Math.random()*(i+1)); [a[i],a[j]]=[a[j],a[i]]; } return a; };
+const norm = s => String(s).toLowerCase().normalize('NFC').replace(/\s+/g,' ').trim().replace(/[.,!?;:"']+$/,'');
+const strip = s => norm(s).normalize('NFD').replace(/[̀-ͯ]/g,'').replace(/đ/g,'d');
+const compact = s => (' '+s+' ').replace(/\s(và|va|and)\s/g,' ').replace(/[\s,;.\/&+\-–]+/g,'');
+const blanks = q => (String(q).match(/_{3,}/g) || []).length;
+const qkey = q => q.type + '|' + q.q;
+const rnd = (a,b) => a + Math.floor(Math.random()*(b-a+1));
+const limited = () => settings.rolls > 0;
+const hasRolls = p => !limited() || p.rolls > 0;
+function cellXY(n){ const C = MAP.cols, R = MAP.rows, r = Math.floor((n-1)/C), c0 = (n-1)%C, c = r%2===0 ? c0 : C-1-c0; return {x:c*100+50, y:(R-1-r)*100+50, r, c}; }
+
+/* ================= audio ================= */
+const bgm = new Audio('assets/background.mp3'); bgm.loop = true; bgm.volume = .32;
+let actx = null, audioUnlocked = false;
+function playDice(){ if(!settings.sfx) return; try{ const a = new Audio('assets/dice.mp3'); a.volume = .9; a.play().catch(()=>{}); }catch(e){} }
+function tone(freqs, dur=.12, type='triangle', vol=.12){
+  if(!settings.sfx) return;
+  try{
+    actx = actx || new (window.AudioContext||window.webkitAudioContext)();
+    let t = actx.currentTime;
+    freqs.forEach(f => { const o = actx.createOscillator(), g = actx.createGain(); o.type=type; o.frequency.value=f;
+      g.gain.setValueAtTime(vol,t); g.gain.exponentialRampToValueAtTime(.001,t+dur); o.connect(g).connect(actx.destination); o.start(t); o.stop(t+dur); t += dur*.8; });
+  }catch(e){}
+}
+const sfx = { right:()=>tone([660,880,1320],.13), wrong:()=>tone([300,220],.2,'sawtooth',.08), hop:()=>tone([520],.05,'sine',.05),
+  ladder:()=>tone([523,659,784,1046],.1), dragon:()=>tone([700,560,440,330,250],.09,'square',.05), lucky:()=>tone([880,1175,1568],.12) };
+function syncMusic(){
+  $('#btnMusic span').textContent = settings.music ? 'Nhạc: bật' : 'Nhạc: tắt';
+  $('#btnMusic').classList.toggle('off', !settings.music);
+  if(settings.music && audioUnlocked) bgm.play().catch(()=>{}); else bgm.pause();
+}
+function unlockAudio(){ if(audioUnlocked) return; audioUnlocked = true; syncMusic(); }
+
+/* ================= map geometry ================= */
+const SVGNS = 'http://www.w3.org/2000/svg';
+let luckyCells = new Set(), obstacles = [];
+const dragonPaths = {};
+function applyMap(){
+  MAP = MAPS[settings.map] || MAPS['30']; N = MAP.cols*MAP.rows; W = MAP.cols*100; H = MAP.rows*100;
+  LADDERS = MAP.ladders; DRAGONS = MAP.dragons;
+  const TH = H + KH, board = $('#board'), ov = $('#overlay');
+  board.style.height = ov.style.height = (H/TH*100) + '%';
+  board.style.gridTemplateColumns = `repeat(${MAP.cols},1fr)`; board.style.gridTemplateRows = `repeat(${MAP.rows},1fr)`;
+  ov.setAttribute('viewBox', `0 0 ${W} ${H}`);
+  $('.kitchen').style.height = (72/TH*100) + '%';
+  $('#wrap').style.aspectRatio = `${W} / ${TH}`;
+  document.documentElement.style.setProperty('--ar', (W/TH).toFixed(4));
+  const g = cellXY(N), em = $('#emperor'), ew = 84, eh = ew*360/273;
+  em.style.width = (ew/W*100) + '%'; em.style.left = ((g.x-ew/2+6)/W*100) + '%'; em.style.top = ((g.y+50-eh-4)/TH*100) + '%';
+  fitFont();
+}
+function fitFont(){ const b = $('#board'), w = b.getBoundingClientRect().width; if(w) b.style.fontSize = (w/MAP.cols*0.3) + 'px'; }
+function clearance(x, y){ let m = Infinity; for(const o of obstacles){ const d = Math.hypot(o.x-x, o.y-y) - o.r; if(d < m) m = d; } return m; }
+function numSpan(n, c, cornersOnly){
+  if(!cornersOnly && clearance(c.x, c.y) >= 16) return '<span class="n">'+n+'</span>';
+  const cands = cornersOnly ? [[-31,-32],[31,-32],[-31,32],[31,32]] : [[-31,-32],[31,-32],[-31,32],[31,32],[0,-35],[0,35],[-35,0],[35,0]];
+  let best = cands[0], bv = -Infinity;
+  for(const [dx,dy] of cands){ const v = clearance(c.x+dx, c.y+dy); if(v > bv + 0.5){ bv = v; best = [dx,dy]; } }
+  return `<span class="n corner" style="left:${50+best[0]}%;top:${50+best[1]}%">${n}</span>`;
+}
+function buildBoard(){
+  const b = $('#board'); b.innerHTML = '';
+  for(let row=MAP.rows-1; row>=0; row--){
+    for(let col=0; col<MAP.cols; col++){
+      const n = row%2===0 ? row*MAP.cols+col+1 : row*MAP.cols+(MAP.cols-1-col)+1;
+      const d = document.createElement('div'), c = cellXY(n);
+      d.className = 'cell ' + ((row+col)%2 ? 'b' : 'a'); d.dataset.n = n;
+      if(n===N){ d.className = 'cell goal'; d.innerHTML = '<span class="n corner goal-n" style="left:13%;top:87%">'+n+'</span>'; }
+      else if(luckyCells.has(n)){ d.classList.add('lucky'); d.innerHTML = numSpan(n, c, true) + envelopeSVG(); }
+      else d.innerHTML = numSpan(n, c, false);
+      b.appendChild(d);
+    }
+  }
+}
+function pickLucky(){
+  const forbid = new Set([1, N]);
+  Object.entries(LADDERS).forEach(([a,b]) => { forbid.add(+a); forbid.add(+b); });
+  Object.entries(DRAGONS).forEach(([a,b]) => { forbid.add(+a); forbid.add(+b); });
+  const lo = 2, hi = N-2, k = MAP.lucky, out = new Set();
+  for(let i=0;i<k;i++){
+    const a = Math.floor(lo + (hi-lo+1)*i/k), z = Math.floor(lo + (hi-lo+1)*(i+1)/k) - 1, cands = [];
+    for(let c=a; c<=z; c++) if(!forbid.has(c)) cands.push(c);
+    const clear = cands.filter(c => { const p = cellXY(c); return clearance(p.x, p.y) >= 0; });
+    const pool = clear.length ? clear : cands;
+    if(pool.length) out.add(pool[rnd(0, pool.length-1)]);
+  }
+  luckyCells = out;
+}
+function envelopeSVG(cls=''){
+  return '<svg class="'+cls+'" viewBox="0 0 60 74" aria-hidden="true"><rect x="5" y="4" width="50" height="66" rx="7" fill="#D9372F" stroke="#7E1B1B" stroke-width="4"/>'+
+  '<path d="M5 22 Q30 40 55 22" fill="none" stroke="#7E1B1B" stroke-width="4"/><circle cx="30" cy="34" r="11" fill="#F5BF3C" stroke="#7E1B1B" stroke-width="3.5"/>'+
+  '<text x="30" y="39.5" text-anchor="middle" font-family="Paytone One, sans-serif" font-size="15" fill="#7E1B1B">?</text>'+
+  '<path d="M14 54h32M18 61h24" stroke="#F5BF3C" stroke-width="3" stroke-linecap="round"/></svg>';
+}
+function el(tag, attrs, parent){ const e = document.createElementNS(SVGNS, tag); for(const k in attrs) e.setAttribute(k, attrs[k]); if(parent) parent.appendChild(e); return e; }
+function drawOverlay(){
+  const svg = $('#overlay'); svg.innerHTML = ''; obstacles = [];
+  for(const k in dragonPaths) delete dragonPaths[k];
+  const gl = el('g', {}, svg), gd = el('g', {}, svg);
+  Object.entries(LADDERS).forEach(([a,b]) => drawLadder(gl, +a, +b));
+  Object.entries(DRAGONS).forEach(([h,t], i) => drawDragon(gd, +h, +t, DRAGON_COLORS[i % DRAGON_COLORS.length], i));
+}
+function drawLadder(g, a, b){
+  const A = cellXY(a), B = cellXY(b);
+  const dx = B.x-A.x, dy = B.y-A.y, L = Math.hypot(dx,dy), ux = dx/L, uy = dy/L, nx = -uy, ny = ux, w = 17;
+  const s = {x:A.x - ux*18, y:A.y - uy*18}, e = {x:B.x + ux*8, y:B.y + uy*8};
+  for(let t=0; t<=1.0001; t+=0.04) obstacles.push({x:s.x+(e.x-s.x)*t, y:s.y+(e.y-s.y)*t, r:24});
+  obstacles.push({x:e.x, y:e.y, r:22});
+  const rail = (o, col, sw) => el('line', {x1:s.x+nx*o, y1:s.y+ny*o, x2:e.x+nx*o, y2:e.y+ny*o, stroke:col, 'stroke-width':sw, 'stroke-linecap':'round'}, g);
+  const steps = Math.max(3, Math.floor((L+10)/30));
+  for(let i=1;i<steps;i++){ const t = i/steps, px = s.x+(e.x-s.x)*t, py = s.y+(e.y-s.y)*t;
+    el('line',{x1:px-nx*w,y1:py-ny*w,x2:px+nx*w,y2:py+ny*w,stroke:'#5A1414','stroke-width':10,'stroke-linecap':'round'},g);
+    el('line',{x1:px-nx*w,y1:py-ny*w,x2:px+nx*w,y2:py+ny*w,stroke:'#FFF3D6','stroke-width':5,'stroke-linecap':'round'},g); }
+  [-w, w].forEach(o => { rail(o,'#5A1414',14); rail(o,'#F5BF3C',8); rail(o,'#FFE89A',2.5); });
+  const cg = el('g', {transform:`translate(${e.x},${e.y})`}, g);
+  [[-14,4,11],[0,-4,14],[15,3,11]].forEach(([x,y,r]) => el('circle',{cx:x,cy:y,r:r+3,fill:'#5A1414'},cg));
+  [[-14,4,11],[0,-4,14],[15,3,11]].forEach(([x,y,r]) => el('circle',{cx:x,cy:y,r,fill:'#FFFFFF'},cg));
+  el('path',{d:'M-8 2 q4 -6 8 0 q4 6 8 0',fill:'none',stroke:'#7FC2EE','stroke-width':2.5,'stroke-linecap':'round'},cg);
+}
+function drawDragon(g, h, t, col, idx){
+  const Hd = cellXY(h), T = cellXY(t);
+  const dx = T.x-Hd.x, dy = T.y-Hd.y, L = Math.hypot(dx,dy), nx = -dy/L, ny = dx/L;
+  const amp = MAP.cols <= 6 ? Math.min(42, 16 + L*0.08) : Math.min(70, 26 + L*0.09), waves = Math.max(1, Math.round(L/300)) + 0.5, phase = idx%2 ? Math.PI : 0;
+  const NP = 90, pts = [];
+  for(let i=0;i<=NP;i++){ const s = i/NP, env = Math.pow(Math.sin(Math.PI*s), .7), off = amp*Math.sin(2*Math.PI*waves*s + phase)*env;
+    pts.push({x:Hd.x+dx*s+nx*off, y:Hd.y+dy*s+ny*off}); }
+  dragonPaths[h] = pts;
+  const tan = i => { const a = pts[Math.max(0,i-1)], b = pts[Math.min(NP,i+1)], l = Math.hypot(b.x-a.x,b.y-a.y)||1; return {x:(b.x-a.x)/l, y:(b.y-a.y)/l}; };
+  const width = s => 36 - 26*s;
+  pts.forEach((p,i) => obstacles.push({x:p.x, y:p.y, r:width(i/NP)/2 + 10}));
+  const left = [], right = [], bellyA = [], bellyB = [];
+  pts.forEach((p,i) => { const tg = tan(i), qx = -tg.y, qy = tg.x, w = width(i/NP)/2;
+    left.push([p.x+qx*w, p.y+qy*w]); right.push([p.x-qx*w, p.y-qy*w]);
+    bellyA.push([p.x-qx*w*0.05, p.y-qy*w*0.05]); bellyB.push([p.x-qx*w*0.82, p.y-qy*w*0.82]); });
+  const poly = (a,b) => 'M' + a.map(p=>p.map(v=>v.toFixed(1)).join(',')).join(' L') + ' L' + b.slice().reverse().map(p=>p.map(v=>v.toFixed(1)).join(',')).join(' L') + ' Z';
+  const grp = el('g', {}, g);
+  for(let i=6;i<NP-6;i+=5){ const p = pts[i], tg = tan(i), qx=-tg.y, qy=tg.x, w = width(i/NP)/2, fl = w*0.9 + 4;
+    const b1 = [p.x+qx*w*0.6 - tg.x*6, p.y+qy*w*0.6 - tg.y*6], b2 = [p.x+qx*w*0.6 + tg.x*6, p.y+qy*w*0.6 + tg.y*6], tip = [p.x+qx*(w+fl) - tg.x*7, p.y+qy*(w+fl) - tg.y*7];
+    el('path',{d:`M${b1} L${tip} L${b2} Z`, fill:col.fin, stroke:'#3A1E16','stroke-width':2.5,'stroke-linejoin':'round'},grp); }
+  [[0.28,1],[0.6,-1]].forEach(([s,side]) => { const i = Math.round(s*NP), p = pts[i], tg = tan(i), qx=-tg.y*side, qy=tg.x*side, w = width(s)/2;
+    const kx = p.x+qx*(w+16)+tg.x*10, ky = p.y+qy*(w+16)+tg.y*10;
+    el('line',{x1:p.x,y1:p.y,x2:kx,y2:ky,stroke:'#3A1E16','stroke-width':15,'stroke-linecap':'round'},grp);
+    el('line',{x1:p.x,y1:p.y,x2:kx,y2:ky,stroke:col.body,'stroke-width':9,'stroke-linecap':'round'},grp);
+    [-0.6,0,0.6].forEach(a => { const ca = Math.cos(a), sa = Math.sin(a), dxp = (qx*ca - qy*sa)*8, dyp = (qy*ca + qx*sa)*8;
+      el('line',{x1:kx,y1:ky,x2:kx+dxp,y2:ky+dyp,stroke:'#FFF3D6','stroke-width':3,'stroke-linecap':'round'},grp); }); });
+  { const p = pts[NP], tg = tan(NP), qx=-tg.y, qy=tg.x;
+    [-0.7,0,0.7].forEach(a => { const ca=Math.cos(a), sa=Math.sin(a), vx = tg.x*ca - tg.y*sa, vy = tg.y*ca + tg.x*sa;
+      el('path',{d:`M${p.x-qx*4},${p.y-qy*4} Q${p.x+vx*16+qx*10},${p.y+vy*16+qy*10} ${p.x+vx*28},${p.y+vy*28} Q${p.x+vx*12-qx*6},${p.y+vy*12-qy*6} ${p.x+qx*4},${p.y+qy*4} Z`,
+        fill:col.fin, stroke:'#3A1E16','stroke-width':2.5,'stroke-linejoin':'round'},grp); });
+    obstacles.push({x:p.x+tg.x*14, y:p.y+tg.y*14, r:18}); }
+  el('path',{d:poly(left,right), fill:col.body, stroke:'#3A1E16','stroke-width':4,'stroke-linejoin':'round'},grp);
+  el('path',{d:poly(bellyA,bellyB), fill:col.belly, opacity:.95},grp);
+  for(let i=8;i<NP-2;i+=4){ const a = bellyA[i], b = bellyB[i]; el('line',{x1:a[0],y1:a[1],x2:b[0],y2:b[1],stroke:'#3A1E16','stroke-width':1.6,opacity:.45},grp); }
+  for(let i=8;i<NP-6;i+=6){ const p = pts[i], tg = tan(i), qx=-tg.y, qy=tg.x, w = width(i/NP)/2;
+    el('path',{d:`M${p.x+qx*w*0.55-tg.x*5},${p.y+qy*w*0.55-tg.y*5} q${tg.x*5+qx*w*0.25},${tg.y*5+qy*w*0.25} ${tg.x*10},${tg.y*10}`, fill:'none', stroke:'#3A1E16','stroke-width':1.8,opacity:.4,'stroke-linecap':'round'},grp); }
+  const tg0 = tan(2), ox = -tg0.x, oy = -tg0.y, ang = Math.atan2(oy, ox)*180/Math.PI, flip = ox < 0 ? -1 : 1;
+  obstacles.push({x:Hd.x+ox*14, y:Hd.y+oy*14, r:44});
+  const hg = el('g', {transform:`translate(${Hd.x},${Hd.y}) rotate(${ang}) scale(1,${flip})`}, grp);
+  const O = '#3A1E16';
+  [[-14,-22,14,10,-30],[-18,0,15,11,0],[-14,22,14,10,30]].forEach(([x,y,rx,ry,r]) => el('ellipse',{cx:x,cy:y,rx,ry,fill:col.fin,stroke:O,'stroke-width':3,transform:`rotate(${r} ${x} ${y})`},hg));
+  const horn = 'M0 -16 C -6 -34, -18 -40, -30 -44 M-12 -34 C -14 -44, -10 -50, -6 -54';
+  el('path',{d:horn,fill:'none',stroke:O,'stroke-width':9,'stroke-linecap':'round'},hg);
+  el('path',{d:horn,fill:'none',stroke:'#F5BF3C','stroke-width':4.5,'stroke-linecap':'round'},hg);
+  el('ellipse',{cx:4,cy:0,rx:27,ry:22,fill:col.body,stroke:O,'stroke-width':3.5},hg);
+  el('ellipse',{cx:30,cy:5,rx:19,ry:13.5,fill:col.belly,stroke:O,'stroke-width':3.5},hg);
+  el('circle',{cx:42,cy:-1,r:2.6,fill:O},hg);
+  el('path',{d:'M20 13 q10 6 24 0',fill:'none',stroke:O,'stroke-width':2.5,'stroke-linecap':'round'},hg);
+  el('ellipse',{cx:8,cy:9,rx:6,ry:4,fill:'#F49AA0',opacity:.8},hg);
+  el('circle',{cx:10,cy:-7,r:8.5,fill:'#fff',stroke:O,'stroke-width':3},hg);
+  el('circle',{cx:12,cy:-7,r:4.4,fill:O},hg);
+  el('circle',{cx:13.5,cy:-8.6,r:1.5,fill:'#fff'},hg);
+  el('path',{d:'M2 -17 q8 -5 16 0',fill:'none',stroke:O,'stroke-width':3,'stroke-linecap':'round'},hg);
+  const wh = 'M40 9 C 58 22, 44 40, 26 40 M40 -6 C 60 -18, 62 -36, 44 -40';
+  el('path',{d:wh,fill:'none',stroke:O,'stroke-width':5,'stroke-linecap':'round'},hg);
+  el('path',{d:wh,fill:'none',stroke:'#F5BF3C','stroke-width':2.4,'stroke-linecap':'round'},hg);
+}
+
+/* ================= dice ================= */
+const PIPS = {1:[[50,50]],2:[[28,28],[72,72]],3:[[26,26],[50,50],[74,74]],4:[[28,28],[72,28],[28,72],[72,72]],5:[[26,26],[74,26],[50,50],[26,74],[74,74]],6:[[28,24],[72,24],[28,50],[72,50],[28,76],[72,76]]};
+function drawDie(v){
+  const c = (v===1||v===4) ? '#C8372F' : '#3A1E16';
+  $('#die').innerHTML = '<svg viewBox="0 0 100 100">' + PIPS[v].map(([x,y]) => `<circle cx="${x}" cy="${y}" r="${v===1?14:9.5}" fill="${c}"/>`).join('') + '</svg>';
+  $('#die').setAttribute('aria-label','Xúc xắc: '+v);
+}
+async function rollDice(){
+  playDice();
+  const d = $('#die'); d.classList.add('rolling');
+  const until = performance.now() + 1000; let v = 1;
+  while(performance.now() < until){ v = rnd(1,6); drawDie(v); await sleep(85); }
+  d.classList.remove('rolling');
+  v = rnd(1,6); drawDie(v); return v;
+}
+
+/* ================= game state ================= */
+let G = null;
+function newGame(){
+  applyMap(); drawOverlay(); pickLucky();
+  const lim = limited() ? settings.rolls : Infinity;
+  G = { players: roster.slice(0, MAX_PLAYERS).map((r,i) => ({id:'p'+i, name:r.name || ('Đội '+(i+1)), skin:r.skin, pos:0, skip:false, rolls:lim})),
+        turn:0, busy:false, over:false, deck:[], used:new Set(), log:[], tie:null };
+  $('#emperor').classList.remove('glow');
+  buildBoard(); buildTokens(); render();
+  log(`Ván mới trên bản đồ ${MAP.name}${limited() ? `, mỗi đội ${settings.rolls} lượt gieo` : ''}.`);
+  drawDie(rnd(1,6));
+  hint(`Tới lượt ${cur().name}. Bấm “Gieo xúc xắc” hoặc phím cách.`);
+}
+const cur = () => G.players[G.turn];
+function log(msg){ G.log.unshift(msg); G.log = G.log.slice(0,40); $('#log').innerHTML = G.log.map(m=>'<li>'+esc(m)+'</li>').join(''); }
+function toast(msg, ms=2200){ const t = document.createElement('div'); t.className='toast'; t.textContent = msg; document.body.appendChild(t); setTimeout(()=>t.remove(), ms); }
+function hint(msg){ $('#hint').textContent = msg; }
+const posLabel = p => p.pos===0 ? 'Đang ở Gian Bếp' : p.pos===N ? 'Đã tới Thiên Đình' : 'Ô '+p.pos;
+const rollsLabel = p => limited() ? `còn ${Math.max(0,p.rolls)} lượt gieo` : '';
+
+function tokenXY(p){
+  const list = G.players;
+  if(p.pos===0){ const i = list.indexOf(p), n = list.length, sp = Math.min(88, (W-250)/Math.max(1,n)); return {x:48 + i*sp, y:H+52, s:Math.min(1, sp/86)}; }
+  const c = cellXY(p.pos), same = list.filter(q=>q.pos===p.pos), k = same.indexOf(p), n = same.length;
+  let offs, s;
+  if(n===1){ offs=[[0,0]]; s=1; }
+  else if(n===2){ offs=[[-20,0],[20,0]]; s=.8; }
+  else if(n<=4){ offs=[[-20,-8],[20,-8],[-20,16],[20,16]]; s=.62; }
+  else { offs=[[-30,-8],[-10,-8],[10,-8],[30,-8],[-30,16],[-10,16],[10,16],[30,16]]; s=.48; }
+  const o = offs[k] || [0,0]; return {x:c.x+o[0], y:c.y+o[1]+26, s};
+}
+function place(elm, x, y){ elm.style.left = (x/W*100)+'%'; elm.style.top = (y/(H+KH)*100)+'%'; }
+function buildTokens(){
+  const box = $('#tokens'); box.innerHTML = '';
+  G.players.forEach(p => { const s = skin(p.skin); const d = document.createElement('div'); d.className='token'; d.id='tk-'+p.id; d.style.setProperty('--c', s.color); d.style.width = (84/W*100)+'%';
+    d.innerHTML = `<div class="ti"><img src="${s.img}" alt="${esc(p.name)}"><span class="ring"></span></div>`; box.appendChild(d); });
+}
+function render(){
+  G.players.forEach(p => { const d = document.getElementById('tk-'+p.id); if(!d) return; const {x,y,s} = tokenXY(p); place(d,x,y); d.style.setProperty('--s', s);
+    d.classList.toggle('cur', p===cur() && !G.over); d.style.zIndex = p===cur() ? 7 : 5; });
+  const p = cur(), s = skin(p.skin);
+  $('#curImg').src = s.img; $('#curAv').style.setProperty('--c', s.color+'55'); $('#curName').textContent = p.name;
+  $('#curWhere').textContent = [posLabel(p), rollsLabel(p), p.skip ? 'bị cấm lượt' : ''].filter(Boolean).join(' · ');
+  $('#plist').innerHTML = G.players.map(q => `<li class="${q===p && !G.over?'cur':''}${hasRolls(q)?'':' done'}"><img src="${skin(q.skin).img}" alt=""><span class="nm">${esc(q.name)}${q.skip?'<span class="badge">cấm lượt</span>':''}${limited()?`<small>${rollsLabel(q)}</small>`:''}</span><span class="ps">${q.pos===0?'Bếp':q.pos}</span></li>`).join('');
+  $('#btnRoll').disabled = G.busy || G.over;
+  $('#btnRoll').textContent = G.over ? 'Ván đã kết thúc' : G.busy ? 'Đang xử lý…' : 'Gieo xúc xắc';
+}
+
+/* ================= movement ================= */
+async function walk(p, delta){
+  const dir = Math.sign(delta); let n = Math.abs(delta);
+  const tk = document.getElementById('tk-'+p.id);
+  while(n-- > 0){ const nxt = p.pos + dir; if(nxt < 0 || nxt > N) break; p.pos = nxt; render(); tk.classList.remove('hop'); void tk.offsetWidth; tk.classList.add('hop'); sfx.hop(); await sleep(240); }
+  tk.classList.remove('hop');
+}
+async function advance(p, roll){
+  let steps = roll;
+  if(p.pos + roll > N){
+    if(settings.exact){ toast(`${p.name} cần đúng ${N-p.pos} bước để về đích nên đứng yên`); log(`${p.name} cần đúng ${N-p.pos} bước, đứng yên.`); await sleep(900); return; }
+    steps = N - p.pos;
+  }
+  await walk(p, steps);
+}
+async function climb(p, to){
+  const tk = document.getElementById('tk-'+p.id); sfx.ladder();
+  tk.style.transition = 'left .9s ease-in-out, top .9s ease-in-out, transform .2s'; p.pos = to; render(); await sleep(950); tk.style.transition = '';
+}
+async function slide(p, from){
+  const tk = document.getElementById('tk-'+p.id), pts = dragonPaths[from]; sfx.dragon();
+  tk.style.transition = 'none'; const dur = 1300, t0 = performance.now();
+  await new Promise(res => { const step = now => { const k = Math.min(1,(now-t0)/dur), e = k<.5 ? 2*k*k : 1-Math.pow(-2*k+2,2)/2, i = Math.min(pts.length-1, Math.round(e*(pts.length-1)));
+    place(tk, pts[i].x, pts[i].y+26); if(k<1) requestAnimationFrame(step); else res(); }; requestAnimationFrame(step); });
+  p.pos = DRAGONS[from]; render(); await sleep(60); tk.style.transition = '';
+}
+
+/* ================= turn flow ================= */
+async function takeTurn(){
+  if(!G || G.busy || G.over) return;
+  if($('#modalRoot').children.length) return;
+  unlockAudio();
+  const p = cur();
+  if(!hasRolls(p)) return endTurn(false);
+  G.busy = true; if(limited()) p.rolls--; render();
+  const roll = await rollDice();
+  log(`${p.name} gieo được ${roll}.`);
+  const remaining = N - p.pos;
+  if(settings.exact && remaining <= 6 && roll !== remaining){
+    hint(`Cần gieo đúng ${remaining} mới về được Thiên Đình.`); toast(`${p.name} cần đúng ${remaining} để về đích, chờ lượt sau`);
+    log(`${p.name} cần đúng ${remaining}, đứng yên.`); await sleep(1200); return endTurn(false);
+  }
+  const q = drawQuestion();
+  let res;
+  if(q) res = await askQuestion(q, p, roll);
+  else { toast('Đã dùng hết câu hỏi của ván này, lượt này đi thẳng', 3000); res = {by:p}; }
+  let extra = false;
+  if(res.by === p){
+    log(`${p.name} trả lời đúng, tiến ${roll} bước.`); await advance(p, roll);
+    extra = await resolveLanding(p, true);
+    if(p.pos === N) return win(p, 'Về tới Thiên Đình đầu tiên');
+  } else if(res.by){
+    const st = res.by;
+    log(`${st.name} cướp quyền thành công, tiến ${roll} bước.`); await advance(st, roll);
+    await resolveLanding(st, false);
+    if(st.pos === N) return win(st, 'Cướp quyền và về tới Thiên Đình');
+  } else log(`Không ai trả lời đúng, ${p.name} đứng yên.`);
+  endTurn(extra);
+}
+async function resolveLanding(p, isCurrent, allowEvent=true){
+  if(p.pos === 0 || p.pos === N) return false;
+  if(LADDERS[p.pos]){ const from = p.pos; toast(`Thang mây! ${p.name} leo từ ô ${from} lên ô ${LADDERS[from]}`); log(`${p.name} leo thang ${from} → ${LADDERS[from]}.`); await climb(p, LADDERS[from]); return false; }
+  if(DRAGONS[p.pos]){ const from = p.pos; toast(`Rồng quẫy đuôi! ${p.name} trượt từ ô ${from} xuống ô ${DRAGONS[from]}`); log(`${p.name} bị rồng đưa xuống ${from} → ${DRAGONS[from]}.`); await slide(p, from); return false; }
+  if(allowEvent && luckyCells.has(p.pos)) return await luckyEvent(p, isCurrent);
+  return false;
+}
+const EVENTS = [{w:3, kind:'forward'}, {w:2, kind:'banOther'}, {w:2, kind:'selfSkip'}, {w:1, kind:'extra'}];
+function pickEvent(p){
+  const canBan = G.players.some(q => q !== p && hasRolls(q));
+  const pool = EVENTS.filter(e => canBan || e.kind !== 'banOther');
+  const tot = pool.reduce((s,e)=>s+e.w,0); let r = Math.random()*tot;
+  for(const e of pool){ r -= e.w; if(r < 0) return e.kind; } return 'forward';
+}
+async function luckyForward(p, isCurrent, title){
+  const k = rnd(MAP.fwd[0], MAP.fwd[1]), steps = Math.min(k, N-p.pos);
+  await decree(title || 'Ngọc Hoàng ban lộc', `${p.name} được tiến thêm ${steps} bước.`);
+  log(`Lộc Trời: ${p.name} tiến thêm ${steps}.`); await walk(p, steps); await resolveLanding(p, isCurrent, false); return false;
+}
+async function luckyEvent(p, isCurrent){
+  sfx.lucky();
+  const kind = pickEvent(p);
+  if(kind === 'forward') return luckyForward(p, isCurrent);
+  if(kind === 'selfSkip'){ p.skip = true; await decree('Nam Tào giữ lại', `${p.name} bị cấm lượt tiếp theo${limited() ? ' (mất 1 lượt gieo)' : ''}.`); log(`Lộc Trời: ${p.name} bị cấm lượt kế tiếp.`); render(); return false; }
+  if(kind === 'extra'){
+    if(isCurrent){ if(limited()) p.rolls++; await decree('Bắc Đẩu ưu ái', `${p.name} được gieo thêm một lượt ngay!`); log(`Lộc Trời: ${p.name} được thêm lượt.`); return true; }
+    if(limited()){ p.rolls++; await decree('Bắc Đẩu ưu ái', `${p.name} được thưởng thêm 1 lượt gieo.`); log(`Lộc Trời: ${p.name} được thưởng 1 lượt gieo.`); render(); return false; }
+    return luckyForward(p, isCurrent, 'Bắc Đẩu ưu ái');
+  }
+  if(kind === 'banOther'){ const target = await pickTarget(p); target.skip = true; log(`Lộc Trời: ${p.name} cấm lượt ${target.name}.`); render(); return false; }
+  return false;
+}
+function endTurn(extra){
+  const allDone = () => G.players.every(q => !hasRolls(q));
+  if(allDone()){ G.busy = false; return finishByRolls(); }
+  if(extra && hasRolls(cur())) toast(`${cur().name} gieo tiếp!`);
+  else {
+    let guard = 0;
+    while(guard++ < 200){
+      G.turn = (G.turn+1) % G.players.length;
+      const s = G.players[G.turn];
+      if(!hasRolls(s)) continue;
+      if(s.skip){
+        s.skip = false; if(limited()) s.rolls--;
+        log(`${s.name} bị cấm lượt${limited() ? ', mất 1 lượt gieo' : ''}.`); toast(`${s.name} bị cấm lượt này`);
+        if(allDone()){ G.busy = false; render(); return finishByRolls(); }
+        continue;
+      }
+      break;
+    }
+  }
+  G.busy = false; render();
+  hint(`Tới lượt ${cur().name}. Bấm “Gieo xúc xắc” hoặc phím cách.`);
+}
+function finishByRolls(){
+  G.over = true; render();
+  const max = Math.max(...G.players.map(p=>p.pos)), top = G.players.filter(p=>p.pos===max);
+  log('Các đội đã dùng hết lượt gieo.');
+  if(top.length === 1) return win(top[0], `Hết lượt gieo, đứng cao nhất ở ô ${max}`);
+  G.tie = top; $('#emperor').classList.add('glow');
+  hint('Hòa! Bấm vào Ngọc Hoàng ở đích để ra câu hỏi phụ.');
+  const rank = [...G.players].sort((a,b)=>b.pos-a.pos);
+  const m = openModal(`<div class="sheet" role="dialog" aria-modal="true"><button class="x" aria-label="Đóng">×</button><h3>Hết lượt gieo!</h3>
+    <p class="sub">${top.map(p=>esc(p.name)).join(', ')} cùng đứng ở ${max===0?'Gian Bếp':'ô '+max}. Bấm vào Ngọc Hoàng ở đích để ra câu hỏi phụ tìm người thắng.</p>
+    <ol class="rank">${rank.map(p=>`<li class="${top.includes(p)?'top':''}"><img src="${skin(p.skin).img}" alt=""><span>${esc(p.name)}</span><b>${p.pos===0?'Bếp':'Ô '+p.pos}</b></li>`).join('')}</ol>
+    <div class="row"><button class="btn pri" id="tbgo">Ra câu hỏi phụ</button><button class="btn" id="tbx">Xem bàn cờ</button></div></div>`);
+  const close = () => m.remove();
+  m.querySelector('.x').onclick = close; m.querySelector('#tbx').onclick = close;
+  m.querySelector('#tbgo').onclick = () => { close(); openTiebreak(); };
+}
+
+/* ================= questions ================= */
+function activeQuestions(){ const out = []; sets.filter(s=>s.enabled).forEach(s => s.questions.forEach(q => out.push(q))); return out; }
+function drawQuestion(){
+  if(!G.deck.length) G.deck = shuffle(activeQuestions().filter(q => !G.used.has(qkey(q))));
+  const q = G.deck.pop() || null; if(q) G.used.add(qkey(q)); return q;
+}
+const rightText = q => q.type==='mc' ? q.options[q.answer] : q.type==='fill' ? q.answers[0] : q.items.join(' → ');
+const TYPE_LABEL = {mc:'Trắc nghiệm', fill:'Điền từ', order:'Sắp xếp'};
+function openModal(html, cls=''){ const m = document.createElement('div'); m.className = 'modal ' + cls; m.innerHTML = html; $('#modalRoot').appendChild(m); return m; }
+function askQuestion(q, p, roll){
+  return new Promise(resolve => {
+    let answerer = p, attemptDone = false, timerId = null;
+    const tried = new Set([p]), wrongMC = new Set();
+    const m = openModal(`<div class="scroll" role="dialog" aria-modal="true" aria-label="Câu hỏi"><div class="rod"></div><div class="body">
+      <div class="qhead" id="qh"></div>
+      ${settings.timer>0 ? '<div class="timer"><i id="qt"></i></div>' : ''}
+      <span class="qtype">${TYPE_LABEL[q.type]||''}</span>
+      <p class="qtext">${esc(q.q)}</p>
+      <div id="qa"></div><div id="qv"></div>
+    </div><div class="rod"></div></div>`);
+    const qh = m.querySelector('#qh'), qa = m.querySelector('#qa'), qv = m.querySelector('#qv');
+    const close = v => { clearInterval(timerId); m.remove(); resolve(v); };
+    const header = () => {
+      const s = skin(answerer.skin), steal = answerer !== p;
+      qh.innerHTML = `<img src="${s.img}" alt=""><div class="t"><b>${esc(answerer.name)}${steal ? ' · cướp quyền' : ''}</b>${steal ? `trả lời đúng sẽ tiến ${roll} bước` : `gieo được ${roll} · đúng tiến ${roll}, sai đứng yên`}</div>`;
+    };
+    const startTimer = () => {
+      clearInterval(timerId); if(settings.timer <= 0) return;
+      const total = settings.timer*1000, t0 = performance.now(), bar = m.querySelector('#qt');
+      bar.style.transition = 'none'; bar.style.transform = 'scaleX(1)'; void bar.offsetWidth; bar.style.transition = '';
+      timerId = setInterval(() => { const left = Math.max(0, 1 - (performance.now()-t0)/total); bar.style.transform = `scaleX(${left})`;
+        if(left <= 0){ clearInterval(timerId); toast('Hết giờ!'); onResult(false); } }, 200);
+    };
+    const explainHTML = () => q.explain ? `<span class="explain">${esc(q.explain)}</span>` : '';
+    const markRight = () => qa.querySelector(`.opt[data-i="${q.answer}"]`)?.classList.add('right');
+    const reveal = (title) => {
+      markRight();
+      qv.innerHTML = `<div class="verdict no"><b>${title}</b>Đáp án: ${esc(rightText(q))}. ${esc(p.name)} đứng yên.${explainHTML()}
+        <div class="row"><button class="btn pri" id="qgo">Tiếp tục</button><button class="btn ghost" id="qover">Trọng tài: tính ${esc(answerer.name)} đúng</button></div></div>`;
+      qv.querySelector('#qgo').onclick = () => close({by:null});
+      qv.querySelector('#qover').onclick = () => { sfx.right(); close({by:answerer}); };
+      qv.querySelector('#qgo').focus();
+    };
+    const onResult = ok => {
+      if(attemptDone) return; attemptDone = true; clearInterval(timerId);
+      qa.querySelectorAll('button,input').forEach(b => b.disabled = true);
+      (ok ? sfx.right : sfx.wrong)();
+      if(ok){
+        markRight();
+        qv.innerHTML = `<div class="verdict ok"><b>Chuẩn tấu!</b>${esc(answerer.name)} được tiến ${roll} bước.${explainHTML()}<div class="row"><button class="btn pri" id="qgo">Tiếp tục</button></div></div>`;
+        qv.querySelector('#qgo').onclick = () => close({by:answerer}); qv.querySelector('#qgo').focus(); return;
+      }
+      const others = G.players.filter(x => !tried.has(x));
+      if(!settings.steal || !others.length) return reveal(tried.size > 1 ? 'Không ai trả lời đúng' : 'Sai rồi!');
+      qv.innerHTML = `<div class="verdict no"><b>Sai rồi!</b>${esc(answerer.name)} ${answerer===p ? 'đứng yên' : 'cướp không thành'}. Đội khác có thể trả lời thay để nhận ${roll} bước. Người dẫn chọn đội giơ tay nhanh nhất:
+        <div class="pickers steal">${others.map(o=>`<button data-id="${o.id}"><img src="${skin(o.skin).img}" alt="">${esc(o.name)}</button>`).join('')}</div>
+        <div class="row"><button class="btn" id="qnone">Không đội nào trả lời</button><button class="btn ghost" id="qover">Trọng tài: tính ${esc(answerer.name)} đúng</button></div></div>`;
+      qv.querySelectorAll('.pickers button').forEach(b => b.onclick = () => {
+        answerer = G.players.find(x => x.id === b.dataset.id); tried.add(answerer);
+        qv.innerHTML = ''; attemptDone = false; header(); renderInput(); startTimer();
+      });
+      qv.querySelector('#qnone').onclick = () => reveal('Không ai trả lời đúng');
+      qv.querySelector('#qover').onclick = () => { sfx.right(); close({by:answerer}); };
+    };
+    const renderInput = () => {
+      if(q.type === 'mc'){
+        const keys = 'ABCDEF';
+        qa.innerHTML = '<div class="opts">' + q.options.map((o,i) => `<button class="opt${wrongMC.has(i)?' wrong':''}" data-i="${i}" ${wrongMC.has(i)?'disabled':''}><span class="k">${keys[i]}</span><span>${esc(o)}</span></button>`).join('') + '</div>';
+        qa.querySelectorAll('.opt').forEach(b => b.onclick = () => { const i = +b.dataset.i, ok = i === +q.answer;
+          if(!ok){ b.classList.add('wrong'); wrongMC.add(i); } onResult(ok); });
+      } else if(q.type === 'fill'){
+        const nb = blanks(q.q);
+        qa.innerHTML = (nb>1 ? `<div class="small" style="margin-bottom:6px">Có ${nb} chỗ trống: điền lần lượt, ngăn cách bằng dấu phẩy.</div>` : '') + '<form class="fill" id="ff"><input id="fi" autocomplete="off" placeholder="'+(nb>1?'Ví dụ: ý 1, ý 2':'Nhập câu trả lời…')+'"><button class="btn pri" type="submit">Trả lời</button></form>';
+        const fi = qa.querySelector('#fi'); setTimeout(()=>fi.focus(), 50);
+        qa.querySelector('#ff').onsubmit = e => { e.preventDefault(); if(attemptDone) return; const v = fi.value; if(!v.trim()) return;
+          const ok = q.answers.some(a => norm(a)===norm(v) || compact(norm(a))===compact(norm(v)) || (settings.loose && compact(strip(a))===compact(strip(v)))); onResult(ok); };
+      } else {
+        const pool = shuffle(q.items.map((t,i)=>({t,i}))); if(pool.length>1 && pool.every((x,k)=>x.i===k)) pool.reverse();
+        const picked = [];
+        qa.innerHTML = '<div class="small">Bấm lần lượt theo đúng thứ tự. Bấm vào mục đã chọn để bỏ.</div><div class="order-ans" id="oa"></div><div class="order-pool" id="op"></div><div class="row" style="margin-top:10px"><button class="btn pri" id="oc" disabled>Xác nhận</button><button class="btn" id="or">Làm lại</button></div>';
+        const draw = () => {
+          qa.querySelector('#oa').innerHTML = picked.map((x,k)=>`<button class="chip" data-k="${k}">${esc(x.t)}</button>`).join('');
+          qa.querySelector('#op').innerHTML = pool.filter(x=>!picked.includes(x)).map(x=>`<button class="chip" data-i="${x.i}">${esc(x.t)}</button>`).join('');
+          qa.querySelector('#oc').disabled = picked.length !== pool.length || attemptDone;
+          qa.querySelectorAll('#op .chip').forEach(b => b.onclick = () => { picked.push(pool.find(x=>x.i===+b.dataset.i)); draw(); });
+          qa.querySelectorAll('#oa .chip').forEach(b => b.onclick = () => { if(attemptDone) return; picked.splice(+b.dataset.k,1); draw(); });
+        };
+        draw();
+        qa.querySelector('#or').onclick = () => { if(attemptDone) return; picked.length = 0; draw(); };
+        qa.querySelector('#oc').onclick = () => onResult(picked.every((x,k)=>x.i===k));
+      }
+    };
+    header(); renderInput(); startTimer();
+  });
+}
+function decree(title, text){
+  return new Promise(res => {
+    const m = openModal(`<div class="sheet decree" role="dialog" aria-modal="true">${envelopeSVG('env')}<h4>${esc(title)}</h4><p>${esc(text)}</p><button class="btn pri" id="dok">Lĩnh chỉ</button></div>`);
+    const b = m.querySelector('#dok'); b.focus(); b.onclick = () => { m.remove(); res(); };
+  });
+}
+function pickTarget(p){
+  return new Promise(res => {
+    const others = G.players.filter(q => q !== p && hasRolls(q));
+    const m = openModal(`<div class="sheet decree" role="dialog" aria-modal="true">${envelopeSVG('env')}<h4>Thánh chỉ cấm lượt</h4><p>${esc(p.name)} được chọn một đội bị cấm lượt kế tiếp:</p>
+      <div class="pickers">${others.map(q=>`<button data-id="${q.id}"><img src="${skin(q.skin).img}" alt="">${esc(q.name)}</button>`).join('')}</div></div>`);
+    m.querySelectorAll('.pickers button').forEach(b => b.onclick = () => { m.remove(); res(G.players.find(q=>q.id===b.dataset.id)); });
+  });
+}
+function openTiebreak(){
+  if(!G) return;
+  if(G.busy){ toast('Đợi lượt hiện tại xong rồi bấm lại nhé'); return; }
+  if($('#modalRoot').children.length) return;
+  unlockAudio();
+  const cands = G.tie && G.tie.length ? G.tie : G.players;
+  let q = drawQuestion();
+  const m = openModal(`<div class="scroll" role="dialog" aria-modal="true" aria-label="Câu hỏi phụ"><div class="rod"></div><div class="body">
+    <div class="qhead"><img src="assets/ngoc-hoang.png" alt=""><div class="t"><b>Câu hỏi phụ của Ngọc Hoàng</b>${G.tie ? 'Phân định giữa: ' + cands.map(p=>esc(p.name)).join(', ') : 'Đội nào trả lời đúng trước sẽ thắng'}</div></div>
+    <div id="tbq"></div><div id="tbshow"></div>
+    <div class="row" style="margin:12px 0 4px"><button class="btn" id="tbans">Hiện đáp án (người dẫn)</button><button class="btn" id="tbnext">Câu khác</button><button class="btn" id="tbclose">Đóng</button></div>
+    <p class="small" style="margin:10px 0 6px">Chọn người chiến thắng:</p>
+    <div class="pickers" style="justify-content:flex-start">${cands.map(p=>`<button data-id="${p.id}"><img src="${skin(p.skin).img}" alt="">${esc(p.name)}</button>`).join('')}</div>
+  </div><div class="rod"></div></div>`);
+  const tbq = m.querySelector('#tbq'), tbshow = m.querySelector('#tbshow');
+  const drawQ = () => {
+    tbshow.innerHTML = '';
+    if(!q){ tbq.innerHTML = '<p class="qtext">Đã hết câu hỏi chưa dùng trong ván này. Hãy thêm câu ở mục Bộ câu hỏi.</p>'; m.querySelector('#tbans').disabled = true; return; }
+    m.querySelector('#tbans').disabled = false;
+    let extra = '';
+    if(q.type === 'mc') extra = '<div class="opts">' + q.options.map((o,i)=>`<div class="opt"><span class="k">${'ABCDEF'[i]}</span><span>${esc(o)}</span></div>`).join('') + '</div>';
+    if(q.type === 'order') extra = '<div class="order-pool">' + shuffle(q.items).map(t=>`<span class="chip">${esc(t)}</span>`).join('') + '</div>';
+    tbq.innerHTML = `<span class="qtype">${TYPE_LABEL[q.type]}</span><p class="qtext">${esc(q.q)}</p>${extra}`;
+  };
+  drawQ();
+  m.querySelector('#tbans').onclick = () => { if(q) tbshow.innerHTML = `<div class="verdict ok"><b>Đáp án</b>${esc(rightText(q))}${q.explain ? `<span class="explain">${esc(q.explain)}</span>` : ''}</div>`; };
+  m.querySelector('#tbnext').onclick = () => { q = drawQuestion(); drawQ(); };
+  m.querySelector('#tbclose').onclick = () => m.remove();
+  m.querySelectorAll('.pickers button').forEach(b => b.onclick = () => { m.remove(); win(G.players.find(p=>p.id===b.dataset.id), 'Thắng câu hỏi phụ của Ngọc Hoàng'); });
+}
+function win(p, reason){
+  G.over = true; G.busy = false; G.tie = null; $('#emperor').classList.remove('glow'); render(); sfx.lucky(); setTimeout(sfx.ladder, 400);
+  log(`${p.name} là người chiến thắng! (${reason})`); hint(`${p.name} đã chầu trời. Bấm “Ván mới” để chơi lại.`);
+  const cf = document.createElement('div'); cf.className = 'confetti';
+  const cols = ['#F5BF3C','#C8372F','#2C9A76','#3D7DD8','#FFFFFF','#F29BB2'];
+  for(let i=0;i<70;i++){ const c = document.createElement('i'); c.style.left = Math.random()*100+'%'; c.style.background = cols[i%cols.length]; c.style.animationDuration = (2.2+Math.random()*2.2)+'s'; c.style.animationDelay = (Math.random()*1.2)+'s'; cf.appendChild(c); }
+  document.body.appendChild(cf); setTimeout(()=>cf.remove(), 6000);
+  const m = openModal(`<div class="sheet" role="dialog" aria-modal="true"><div class="row" style="justify-content:center;align-items:flex-end;gap:4px"><img src="${skin(p.skin).img}" alt="" style="width:110px"><img src="assets/ngoc-hoang.png" alt="" style="width:150px"></div>
+    <h3>${esc(p.name)} đã chầu trời!</h3><p class="sub">${esc(reason)}. Ngọc Hoàng ban thưởng cả năm hanh thông.</p>
+    <div class="row" style="justify-content:center"><button class="btn pri" id="wnew">Chơi ván mới</button><button class="btn" id="wclose">Xem lại bàn cờ</button></div></div>`, 'win');
+  m.querySelector('#wnew').onclick = () => { m.remove(); newGame(); };
+  m.querySelector('#wclose').onclick = () => m.remove();
+}
+
+/* ================= splash & rules ================= */
+function splash(){
+  const m = openModal(`<div class="sheet" role="dialog" aria-modal="true" aria-label="Táo đi chầu trời">
+    <h2>Táo đi chầu trời</h2>
+    <div class="lineup"><img src="assets/tao-do.png" alt=""><img src="assets/tao-xanh.png" alt=""><img class="king" src="assets/ngoc-hoang.png" alt=""><img src="assets/be-mat-troi.png" alt=""><img src="assets/tao-luc.png" alt=""></div>
+    <p class="story">Ngày 23 tháng Chạp, các Táo rời Gian Bếp lên Thiên Đình báo cáo với Ngọc Hoàng. Gieo xúc xắc, trả lời đúng để tiến, trả lời sai thì đội khác được cướp quyền. Leo thang mây, né rồng, bốc Lộc Trời. Về ô ${N} trước, hoặc đứng cao nhất khi hết lượt gieo, là thắng.</p>
+    <div class="row"><button class="bigbtn" id="sgo" style="flex:0 1 220px">Vào chơi</button><button class="btn" id="sp">Đội & cài đặt ván</button><button class="btn" id="sq">Bộ câu hỏi</button></div>
+    <p class="small" style="margin-top:12px">${G.players.length} đội · ${MAP.name} · ${limited() ? settings.rolls + ' lượt gieo mỗi đội · ' : ''}${activeQuestions().length} câu hỏi đang bật</p></div>`, 'splash');
+  m.querySelector('#sgo').onclick = () => { unlockAudio(); m.remove(); };
+  m.querySelector('#sp').onclick = () => { unlockAudio(); m.remove(); openPlayers(); };
+  m.querySelector('#sq').onclick = () => { unlockAudio(); m.remove(); openBank(); };
+}
+function openRules(){
+  const m = openModal(`<div class="sheet" role="dialog" aria-modal="true"><button class="x" aria-label="Đóng">×</button><h3>Luật chơi</h3>
+    <ol style="padding-left:20px;margin:8px 0;display:flex;flex-direction:column;gap:6px;font-weight:600">
+      <li>Mọi đội xuất phát ở Gian Bếp. Đến lượt thì gieo xúc xắc, rồi trả lời một câu hỏi trong ${settings.timer>0 ? settings.timer+' giây' : 'thời gian không giới hạn'}.</li>
+      <li><b>Đúng:</b> tiến đúng số vừa gieo. Gặp chân thang mây thì leo lên.</li>
+      <li><b>Sai:</b> đội đó đứng yên. ${settings.steal ? 'Các đội khác giơ tay cướp quyền; đội được chọn trả lời đúng sẽ tiến số bước vừa gieo. Sai thì đội khác tiếp tục được cướp.' : ''}</li>
+      <li>Dừng ở đầu rồng thì trượt theo thân rồng xuống đuôi.</li>
+      <li>Có ${MAP.lucky} ô <b>Lộc Trời</b> (bao lì xì) đặt ngẫu nhiên mỗi ván: được tiến thêm, được cấm lượt một đội khác, bị cấm lượt tiếp theo, hoặc được gieo thêm.</li>
+      ${limited() ? `<li>Mỗi đội có <b>${settings.rolls} lượt gieo</b>. Bị cấm lượt cũng tính là mất một lượt.</li>` : ''}
+      ${settings.exact ? '<li>Khi còn 6 ô trở xuống, phải gieo <b>đúng</b> số ô còn lại mới được trả lời và về đích.</li>' : ''}
+      <li>Câu hỏi không lặp lại trong một ván.</li>
+      <li>Ai về ô ${N} trước thắng ngay. ${limited() ? 'Hết lượt gieo thì ai đứng cao nhất thắng; nếu hòa, bấm vào Ngọc Hoàng ở đích để ra câu hỏi phụ.' : 'Bấm vào Ngọc Hoàng ở đích để ra câu hỏi phụ khi cần phân định.'}</li>
+    </ol><div class="row"><button class="btn pri" id="rok">Đã hiểu</button></div></div>`);
+  const close = () => m.remove(); m.querySelector('.x').onclick = close; m.querySelector('#rok').onclick = close;
+}
+
+/* ================= players & game settings ================= */
+function openPlayers(){
+  let draft = roster.map(r => ({...r}));
+  const ds = {map:settings.map, rolls:settings.rolls, exact:settings.exact, steal:settings.steal};
+  const m = openModal(`<div class="sheet" role="dialog" aria-modal="true"><button class="x" aria-label="Đóng">×</button><h3>Đội & cài đặt ván</h3><p class="sub">Tối đa ${MAX_PLAYERS} đội. Lưu sẽ bắt đầu ván mới.</p>
+    <div class="pedit" id="pe"></div><div class="row"><button class="btn gold" id="padd">+ Thêm đội</button></div>
+    <div class="panel"><h4>Cài đặt ván</h4>
+      <div class="field"><label for="smap">Bản đồ</label><select id="smap">${Object.values(MAPS).map(x=>`<option value="${x.id}" ${x.id===ds.map?'selected':''}>${x.name}</option>`).join('')}</select></div>
+      <div class="field"><label for="srolls">Số lượt gieo của mỗi đội (0 = không giới hạn)</label><input id="srolls" type="number" min="0" max="50" value="${ds.rolls}"></div>
+      <label class="chk small"><input type="checkbox" id="ssteal" ${ds.steal?'checked':''}> Cho phép đội khác cướp quyền khi trả lời sai</label>
+      <label class="chk small"><input type="checkbox" id="sexact" ${ds.exact?'checked':''}> Gần đích phải gieo đúng số ô còn lại</label>
+      <p class="small" id="qneed" style="margin:8px 0 0"></p>
+    </div>
+    <div class="row" style="margin-top:12px"><span style="flex:1"></span><button class="btn" id="pcancel">Hủy</button><button class="btn pri" id="psave">Lưu & chơi ván mới</button></div></div>`);
+  const pe = m.querySelector('#pe');
+  const need = () => {
+    const have = activeQuestions().length, r = Math.max(0, parseInt(m.querySelector('#srolls').value)||0);
+    m.querySelector('#qneed').textContent = r>0 ? `Ván này hỏi tối đa khoảng ${draft.length*r} câu; đang bật ${have} câu.${have < draft.length*r ? ' Hết câu mới thì lượt đó đi thẳng không cần trả lời.' : ''}` : `Đang bật ${have} câu hỏi.`;
+  };
+  const draw = () => {
+    pe.innerHTML = draft.map((r,i) => `<div class="prow"><img src="${skin(r.skin).img}" alt=""><input id="pn${i}" value="${esc(r.name)}" maxlength="24" aria-label="Tên đội ${i+1}">
+      <select id="ps${i}" aria-label="Nhân vật">${SKINS.map(s=>`<option value="${s.id}" ${s.id===r.skin?'selected':''}>${s.name}</option>`).join('')}</select>
+      <button class="del" data-i="${i}" aria-label="Xóa" ${draft.length<=1?'disabled':''}>×</button></div>`).join('');
+    pe.querySelectorAll('input').forEach((inp,i) => inp.oninput = () => draft[i].name = inp.value);
+    pe.querySelectorAll('select').forEach((sel,i) => sel.onchange = () => { draft[i].skin = sel.value; draw(); });
+    pe.querySelectorAll('.del').forEach(b => b.onclick = () => { draft.splice(+b.dataset.i,1); draw(); });
+    m.querySelector('#padd').disabled = draft.length >= MAX_PLAYERS;
+    need();
+  };
+  draw();
+  m.querySelector('#srolls').oninput = need;
+  m.querySelector('#padd').onclick = () => { if(draft.length>=MAX_PLAYERS) return; const used = draft.map(d=>d.skin); const s = SKINS.find(x=>!used.includes(x.id)) || SKINS[draft.length%SKINS.length]; draft.push({name:'Nhóm '+(draft.length+1), skin:s.id}); draw(); };
+  const close = () => m.remove();
+  m.querySelector('.x').onclick = close; m.querySelector('#pcancel').onclick = close;
+  m.querySelector('#psave').onclick = () => {
+    roster = draft.map((d,i)=>({name:(d.name||'').trim() || ('Nhóm '+(i+1)), skin:d.skin})); saveRoster();
+    settings.map = m.querySelector('#smap').value; settings.rolls = Math.max(0, Math.min(50, parseInt(m.querySelector('#srolls').value)||0));
+    settings.steal = m.querySelector('#ssteal').checked; settings.exact = m.querySelector('#sexact').checked; saveSettings();
+    close(); newGame(); toast('Đã lưu, ván mới bắt đầu');
+  };
+}
+
+/* ================= question bank ================= */
+function parseQuick(text){
+  const out = [], errs = [];
+  text.split(/\r?\n/).forEach((line, ln) => {
+    const L = line.trim(); if(!L) return;
+    const m = L.match(/^(TN|DT|SX)\s*:\s*(.*)$/i); if(!m){ errs.push(ln+1); return; }
+    const parts = m[2].split('|').map(s=>s.trim()).filter(Boolean); const tag = m[1].toUpperCase();
+    if(parts.length < 2){ errs.push(ln+1); return; }
+    const q = parts.shift();
+    if(tag==='TN'){ let ans = parts.findIndex(o=>o.startsWith('*')); const options = parts.map(o=>o.replace(/^\*/,'').trim()); if(ans<0) ans = 0; if(options.length<2){ errs.push(ln+1); return; } out.push({type:'mc', q, options, answer:ans}); }
+    else if(tag==='DT'){ out.push({type:'fill', q, answers:parts}); }
+    else { if(parts.length<2){ errs.push(ln+1); return; } out.push({type:'order', q, items:parts}); }
+  });
+  return {out, errs};
+}
+function validQ(q){
+  if(!q || typeof q.q !== 'string' || !q.q.trim()) return false;
+  if(q.type==='mc') return Array.isArray(q.options) && q.options.length>=2 && Number.isInteger(+q.answer) && +q.answer>=0 && +q.answer<q.options.length;
+  if(q.type==='fill') return Array.isArray(q.answers) && q.answers.length>0;
+  if(q.type==='order') return Array.isArray(q.items) && q.items.length>=2;
+  return false;
+}
+function toQuick(q){
+  if(q.type==='mc') return 'TN: ' + q.q + ' | ' + q.options.map((o,i)=>(i===+q.answer?'*':'')+o).join(' | ');
+  if(q.type==='fill') return 'DT: ' + q.q + ' | ' + q.answers.join(' | ');
+  return 'SX: ' + q.q + ' | ' + q.items.join(' | ');
+}
+function openBank(){
+  let selId = sets[0]?.id || null, editIdx = -1, form = {type:'mc'}, delArm = false;
+  const m = openModal(`<div class="sheet wide" role="dialog" aria-modal="true"><button class="x" aria-label="Đóng">×</button><h3>Bộ câu hỏi</h3>
+    <p class="sub">Tick các bộ muốn dùng trong ván. Câu hỏi lưu trong trình duyệt này.</p><div class="qb"><div><div class="sets" id="bsets"></div>
+    <div class="row" style="margin-top:8px"><button class="btn gold" id="bnew">+ Bộ mới</button></div>
+    <div class="panel"><h4>Cài đặt</h4>
+      <div class="field"><label for="stimer">Thời gian trả lời (giây, 0 = không giới hạn)</label><input id="stimer" type="number" min="0" max="300" value="${settings.timer}"></div>
+      <label class="chk small"><input type="checkbox" id="sloose" ${settings.loose?'checked':''}> Điền từ: chấp nhận gõ không dấu</label>
+      <label class="chk small"><input type="checkbox" id="ssfx" ${settings.sfx?'checked':''}> Hiệu ứng âm thanh</label>
+    </div></div><div id="bmain" style="min-width:0"></div></div></div>`);
+  const close = () => { m.remove(); if(G) G.deck = []; render(); };
+  m.querySelector('.x').onclick = close;
+  m.addEventListener('click', e => { if(e.target === m) close(); });
+  m.querySelector('#stimer').onchange = e => { settings.timer = Math.max(0, Math.min(300, parseInt(e.target.value)||0)); saveSettings(); };
+  m.querySelector('#sloose').onchange = e => { settings.loose = e.target.checked; saveSettings(); };
+  m.querySelector('#ssfx').onchange = e => { settings.sfx = e.target.checked; saveSettings(); };
+  m.querySelector('#bnew').onclick = () => { const s = {id:uid(), name:'Bộ câu hỏi mới', enabled:true, questions:[]}; sets.push(s); saveSets(); selId = s.id; editIdx=-1; drawAll(); };
+  const drawSets = () => {
+    m.querySelector('#bsets').innerHTML = sets.map(s => `<div class="setitem ${s.id===selId?'sel':''}" data-id="${s.id}" role="button" tabindex="0"><input type="checkbox" ${s.enabled?'checked':''} aria-label="Dùng bộ ${esc(s.name)}" data-en="${s.id}"><div><div class="nm">${esc(s.name)}</div><small>${s.questions.length} câu${s.enabled?' · đang dùng':''}</small></div></div>`).join('') || '<p class="small">Chưa có bộ nào.</p>';
+    m.querySelectorAll('.setitem').forEach(d => { d.onclick = e => { if(e.target.matches('input')) return; selId = d.dataset.id; editIdx=-1; delArm=false; drawAll(); }; d.onkeydown = e => { if(e.key==='Enter') d.click(); }; });
+    m.querySelectorAll('[data-en]').forEach(c => c.onchange = () => { const s = sets.find(x=>x.id===c.dataset.en); s.enabled = c.checked; saveSets(); drawSets(); });
+  };
+  const formHTML = () => {
+    const f = form;
+    let typeFields = '';
+    if(f.type==='mc'){ const opts = f.options || ['','','','']; f.options = opts; if(f.answer==null) f.answer = 0;
+      typeFields = '<div class="field"><label>Các lựa chọn (chọn nút tròn ở đáp án đúng)</label>' + opts.map((o,i)=>`<div class="mcrow"><input type="radio" name="fans" value="${i}" ${i===+f.answer?'checked':''} aria-label="Đáp án đúng ${i+1}"><input data-opt="${i}" value="${esc(o)}" placeholder="Lựa chọn ${'ABCDEF'[i]}"><button class="btn" data-rm="${i}" ${opts.length<=2?'disabled':''} aria-label="Bỏ lựa chọn">−</button></div>`).join('') +
+        `<button class="btn" id="faddopt" ${opts.length>=6?'disabled':''}>+ Thêm lựa chọn</button></div>`; }
+    else if(f.type==='fill'){ typeFields = `<div class="field"><label for="fans">Đáp án chấp nhận (ngăn cách bằng dấu |)</label><input id="fans" value="${esc((f.answers||[]).join(' | '))}" placeholder="Hà Nội | Ha Noi"></div>`; }
+    else { typeFields = `<div class="field"><label for="fitems">Các mục theo ĐÚNG thứ tự, mỗi dòng một mục (trò chơi sẽ tự xáo trộn)</label><textarea id="fitems" rows="5" placeholder="Bước 1&#10;Bước 2&#10;Bước 3">${esc((f.items||[]).join('\n'))}</textarea></div>`; }
+    return `<div class="panel"><h4>${editIdx>=0 ? 'Sửa câu hỏi #'+(editIdx+1) : 'Thêm câu hỏi'}</h4>
+      <div class="row" style="margin-bottom:8px">${['mc','fill','order'].map(t=>`<button class="btn ${f.type===t?'pri':''}" data-type="${t}">${TYPE_LABEL[t]}</button>`).join('')}</div>
+      <div class="field"><label for="fq">Câu hỏi${f.type==='fill'?' (dùng ___ cho chỗ trống)':''}</label><textarea id="fq" rows="2">${esc(f.q||'')}</textarea></div>
+      ${typeFields}<div class="row"><button class="btn pri" id="fsave">${editIdx>=0?'Lưu thay đổi':'Thêm vào bộ'}</button>${editIdx>=0?'<button class="btn" id="fcancel">Hủy sửa</button>':''}<span class="small" id="ferr" style="color:var(--wrong)"></span></div></div>`;
+  };
+  const readForm = () => {
+    const main = m.querySelector('#bmain'); form.q = main.querySelector('#fq').value;
+    if(form.type==='mc'){ form.options = [...main.querySelectorAll('[data-opt]')].map(i=>i.value); const r = main.querySelector('input[name=fans]:checked'); form.answer = r ? +r.value : 0; }
+    if(form.type==='fill') form.answers = main.querySelector('#fans').value.split('|').map(s=>s.trim()).filter(Boolean);
+    if(form.type==='order') form.items = main.querySelector('#fitems').value.split('\n').map(s=>s.trim()).filter(Boolean);
+  };
+  const drawMain = () => {
+    const s = sets.find(x=>x.id===selId); const main = m.querySelector('#bmain');
+    if(!s){ main.innerHTML = '<p class="small">Tạo một bộ câu hỏi mới để bắt đầu.</p>'; return; }
+    main.innerHTML = `<div class="row"><input id="bname" value="${esc(s.name)}" aria-label="Tên bộ" style="flex:1;font-weight:800"><button class="btn" id="bexp">Xuất bộ</button><button class="btn" id="bdel">${delArm?'Bấm lần nữa để xóa':'Xóa bộ'}</button></div>
+      <ul class="qlist">${s.questions.map((q,i)=>`<li><span class="tg ${q.type}">${TYPE_LABEL[q.type]}</span><span class="tx" title="${esc(q.q)}">${i+1}. ${esc(q.q)}</span><span class="row" style="gap:4px;flex-wrap:nowrap"><button class="btn" data-ed="${i}">Sửa</button><button class="btn" data-rmq="${i}" aria-label="Xóa câu ${i+1}">×</button></span></li>`).join('') || '<li><span></span><span class="small">Bộ này chưa có câu hỏi.</span><span></span></li>'}</ul>
+      ${formHTML()}
+      <div class="panel"><h4>Nhập nhanh nhiều câu</h4>
+        <div class="small">Dán theo mẫu, mỗi dòng một câu (đáp án đúng của trắc nghiệm đánh dấu *). Cũng nhận file .txt hoặc JSON đã xuất.</div>
+        <pre class="fmt">TN: Thủ đô của Việt Nam? | *Hà Nội | Huế | Đà Nẵng | Cần Thơ
+DT: Sông dài nhất Việt Nam chảy qua Hà Nội là sông ___ | Hồng | song Hong
+SX: Sắp xếp từ nhỏ đến lớn | Một | Hai | Ba | Bốn</pre>
+        <textarea id="bquick" rows="4" placeholder="Dán câu hỏi vào đây…"></textarea>
+        <div class="row" style="margin-top:6px"><button class="btn pri" id="bimp">Thêm vào bộ này</button><label class="btn" for="bfile" style="cursor:pointer">Chọn file…</label><input type="file" id="bfile" accept=".txt,.json,text/plain,application/json" hidden><span class="small" id="bmsg"></span></div>
+      </div>
+      <div id="bexpbox"></div>`;
+    main.querySelector('#bname').oninput = e => { s.name = e.target.value || 'Bộ không tên'; saveSets(); drawSets(); };
+    main.querySelector('#bdel').onclick = () => { if(!delArm){ delArm = true; drawMain(); return; } sets = sets.filter(x=>x!==s); saveSets(); selId = sets[0]?.id || null; delArm=false; editIdx=-1; drawAll(); };
+    main.querySelector('#bexp').onclick = () => {
+      const json = JSON.stringify({name:s.name, questions:s.questions}, null, 2);
+      const quick = s.questions.map(toQuick).join('\n');
+      main.querySelector('#bexpbox').innerHTML = `<div class="panel"><h4>Xuất bộ “${esc(s.name)}”</h4><div class="small">Sao chép và lưu lại; khi cần chỉ việc dán vào ô Nhập nhanh.</div>
+        <div class="row" style="margin:6px 0"><button class="btn" id="cpq">Sao chép dạng dòng</button><button class="btn" id="cpj">Sao chép JSON</button><span class="small" id="cpmsg"></span></div><textarea id="expta" rows="6" readonly>${esc(quick)}</textarea></div>`;
+      const ta = main.querySelector('#expta');
+      const cp = (txt) => { ta.value = txt; navigator.clipboard?.writeText(txt).then(()=>{ main.querySelector('#cpmsg').textContent = 'Đã sao chép'; }).catch(()=>{ ta.select(); main.querySelector('#cpmsg').textContent = 'Đã bôi đen, nhấn Ctrl+C'; }) ?? (ta.select()); };
+      main.querySelector('#cpq').onclick = () => cp(quick); main.querySelector('#cpj').onclick = () => cp(json);
+      ta.scrollIntoView({block:'nearest'});
+    };
+    main.querySelectorAll('[data-ed]').forEach(b => b.onclick = () => { editIdx = +b.dataset.ed; form = JSON.parse(JSON.stringify(s.questions[editIdx])); drawMain(); main.querySelector('#fq').focus(); });
+    main.querySelectorAll('[data-rmq]').forEach(b => b.onclick = () => { s.questions.splice(+b.dataset.rmq,1); saveSets(); editIdx=-1; drawSets(); drawMain(); });
+    main.querySelectorAll('[data-type]').forEach(b => b.onclick = () => { readForm(); form = {type:b.dataset.type, q:form.q}; drawMain(); });
+    main.querySelectorAll('[data-rm]').forEach(b => b.onclick = () => { readForm(); const i = +b.dataset.rm; form.options.splice(i,1); if(form.answer>=form.options.length) form.answer = 0; else if(form.answer>i) form.answer--; drawMain(); });
+    const ao = main.querySelector('#faddopt'); if(ao) ao.onclick = () => { readForm(); form.options.push(''); drawMain(); };
+    const fc = main.querySelector('#fcancel'); if(fc) fc.onclick = () => { editIdx=-1; form={type:form.type}; drawMain(); };
+    main.querySelector('#fsave').onclick = () => {
+      readForm(); const q = {type:form.type, q:(form.q||'').trim()};
+      if(q.type==='mc'){ const keep = form.options.map((o,i)=>({o:o.trim(),i})).filter(x=>x.o); q.options = keep.map(x=>x.o); q.answer = Math.max(0, keep.findIndex(x=>x.i===form.answer)); if(!keep.some(x=>x.i===form.answer)) q.answer = -1; }
+      if(q.type==='fill') q.answers = form.answers; if(q.type==='order') q.items = form.items;
+      const err = !q.q ? 'Cần nhập câu hỏi.' : (q.type==='mc' && q.options.length<2) ? 'Cần ít nhất 2 lựa chọn.' : (q.type==='mc' && q.answer<0) ? 'Đáp án đúng đang để trống.' : (q.type==='fill' && !q.answers.length) ? 'Cần ít nhất 1 đáp án.' : (q.type==='order' && q.items.length<2) ? 'Cần ít nhất 2 mục.' : '';
+      if(err){ main.querySelector('#ferr').textContent = err; return; }
+      if(editIdx>=0) s.questions[editIdx] = q; else s.questions.push(q);
+      saveSets(); editIdx = -1; form = {type:q.type}; drawSets(); drawMain(); toast('Đã lưu câu hỏi', 1400);
+    };
+    const doImport = (text) => {
+      const msg = main.querySelector('#bmsg'); text = (text||'').trim(); if(!text){ msg.textContent = 'Chưa có nội dung.'; return; }
+      let qs = [], errs = [];
+      if(/^[\[{]/.test(text)){ try{ const j = JSON.parse(text); const arr = Array.isArray(j) ? j : (j.questions || []); qs = arr.filter(validQ); errs = arr.length - qs.length ? ['JSON: bỏ qua '+(arr.length-qs.length)+' câu sai định dạng'] : []; if(!Array.isArray(j) && j.name && !s.questions.length && s.name==='Bộ câu hỏi mới'){ s.name = j.name; } }catch(e){ msg.textContent = 'JSON không đọc được: kiểm tra dấu ngoặc và dấu phẩy.'; return; } }
+      else { const r = parseQuick(text); qs = r.out; if(r.errs.length) errs = ['Bỏ qua dòng ' + r.errs.join(', ') + ' (cần bắt đầu bằng TN:, DT: hoặc SX: và có dấu |)']; }
+      s.questions.push(...qs); saveSets(); drawSets(); drawMain();
+      m.querySelector('#bmsg').textContent = `Đã thêm ${qs.length} câu. ${errs.join(' ')}`;
+    };
+    main.querySelector('#bimp').onclick = () => doImport(main.querySelector('#bquick').value);
+    main.querySelector('#bfile').onchange = e => { const f = e.target.files[0]; if(!f) return; const rd = new FileReader(); rd.onload = () => doImport(rd.result); rd.readAsText(f); };
+  };
+  const drawAll = () => { drawSets(); drawMain(); };
+  drawAll();
+}
+
+
+/* ================= wire up ================= */
+$('#btnRoll').onclick = takeTurn;
+$('#die').onclick = takeTurn;
+$('#emperor').onclick = openTiebreak;
+$('#emperor').onkeydown = e => { if(e.key==='Enter' || e.key===' '){ e.preventDefault(); openTiebreak(); } };
+$('#btnPlayers').onclick = () => { unlockAudio(); openPlayers(); };
+$('#btnQuestions').onclick = () => { unlockAudio(); openBank(); };
+$('#btnRules').onclick = () => { unlockAudio(); openRules(); };
+$('#btnMusic').onclick = () => { audioUnlocked = true; settings.music = !settings.music; saveSettings(); syncMusic(); };
+let newArm = 0;
+$('#btnNew').onclick = () => {
+  if(G && G.busy) return;
+  if(G && !G.over && G.players.some(p=>p.pos>0) && Date.now() - newArm > 2500){ newArm = Date.now(); toast('Bấm “Ván mới” lần nữa để bỏ ván đang chơi'); return; }
+  newArm = 0; newGame(); toast('Đã bắt đầu ván mới');
+};
+document.addEventListener('keydown', e => {
+  if(e.code === 'Space' && !$('#modalRoot').children.length && !e.target.matches('input,textarea,select,button,[role=button]')){ e.preventDefault(); takeTurn(); }
+  if(e.key === 'Escape'){ const ms = $('#modalRoot').children; const last = ms[ms.length-1]; if(last && last.querySelector('.x')) last.querySelector('.x').click(); }
+});
+try{ new ResizeObserver(fitFont).observe($('#board')); }catch(e){ window.addEventListener('resize', fitFont); }
+
+newGame();
+syncMusic();
+splash();
+})();
+</script>
+</body></html>
